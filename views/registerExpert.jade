@@ -1,14 +1,12 @@
-      //
-         Main hero unit for a primary marketing message or call to action 
-      .hero-unit
-        h1 So you're an expert are you?
-        p
-          form(id='expertDetails', action='/registerExpert', method='post')
-            fieldset(data-role='controlgroup')
-              label(for='name') Name
-              input(id='name',name='name',type='text',value='',placeholder='Your Name')
-            fieldset(data-role='controlgroup')
-              label(for='expertise') Name
-              input(id='expertise',name='expertise',type='text',value='',placeholder='Your Expertise')
-        p
-          a.btn(href='', onclick='document.forms["expertDetails"].submit(); return false;').btn-primary.btn-large Register
+.hero-unit
+  h1 So you're an expert are you?
+  p
+    form(id='expertDetails', action='/registerExpert', method='post')
+      fieldset(data-role='controlgroup')
+        label(for='name') Name
+        input(id='name',name='name',type='text',value='',placeholder='Your Name')
+      fieldset(data-role='controlgroup')
+        label(for='expertise') Expertise
+        input(id='expertise',name='expertise',type='text',value='',placeholder='Your Expertise')
+  p
+    a.btn(href='', onclick='document.forms["expertDetails"].submit(); return false;').btn-primary.btn-large Register
