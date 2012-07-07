@@ -1,5 +1,5 @@
 .hero-unit
-  h1 Expert Q&A
+  h1 #{title}
   p
     | Need help with your stuff? Book into one of our Q&A events!
   - each event in events
@@ -9,5 +9,6 @@
       | #{event.date}
     p
       | #{event.time}
-    p
-      a.btn(href='/event/#{event._id}').btn-primary.btn-large Reserve your place!
+    - if (everyauth.loggedIn)
+      p
+        a.btn(href='/event/#{event._id}').btn-primary.btn-large Reserve your place!
