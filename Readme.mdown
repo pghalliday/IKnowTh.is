@@ -12,6 +12,6 @@
 # Deployment to Heroku
 * From command line:
 * heroku login
-* heroku create
+* heroku create   (or, if site already exists: git remote add heroku git@heroku.com:fivelive.git)
 * git push heroku master
 * heroku addons:add mongohq:free //start mongo
