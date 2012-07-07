@@ -4,7 +4,10 @@
  */
 
 var express = require('express')
-  , routes = require('./routes');
+  , routes = require('./routes')
+  , mongoose = require('mongoose');
+
+//mongoose.connect('mongodb://localhost/Hangout');
 
 var app = module.exports = express.createServer();
 
@@ -31,6 +34,7 @@ app.configure('production', function(){
 
 app.get('/', routes.index);
 app.get('/book', routes.book);
+app.get('/registerExpert', routes.registerExpert);
 
 app.listen(3000, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

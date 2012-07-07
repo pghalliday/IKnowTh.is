@@ -5,3 +5,7 @@ exports.index = function(req, res){
 exports.book = function(req, res){
   res.render('book', { title: 'Hangout' })
 };
+
+exports.registerExpert = function(req, res){
+  res.render('registerExpert', { title: 'Hangout' })
+};
