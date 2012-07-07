@@ -7,7 +7,8 @@ var express = require('express')
   , routes = require('./routes')
   , mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/Hangout');
+var db = process.env.MONGOHQ_URL || 'mongodb://localhost/Hangout';
+mongoose.connect(db);
 
 var app = module.exports = express.createServer();
 
