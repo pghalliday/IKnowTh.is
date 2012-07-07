@@ -1,26 +1,36 @@
-var Expert = require('../models/expert.js');
+var Event = require('../models/event.js');
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Hangout' })
+  Event.find(function(error, events) {
+    res.render('index', { title: 'Expert Q&A', events: events });
+  });
 };
 
-exports.book = function(req, res){
-  res.render('book', { title: 'Hangout' })
+exports.event = function(req, res){
+  Event.findOne({_id: req.params.id}, function(error, event) {
+        res.render('event', { title: 'Expert Q&A', event: event });
+    });
 };
 
-exports.expertDetails = function(req, res){
-  Expert.findOne({_id: req.params.id}, function(error, expert) {
-        res.render('expertDetails', { title: 'Hangout', expert: expert });
-    })
+exports.editEvent = function(req, res){
+  Event.findOne({_id: req.params.id}, function(error, event) {
+        res.render('editEvent', { title: 'Expert Q&A', event: event });
+    });
 };
 
-exports.registerExpert = function(req, res){
-  res.render('registerExpert', { title: 'Hangout' })
+exports.addEvent = function(req, res){
+  res.render('addEvent', { title: 'Expert Q&A' });
 };
 
-exports.registerExpertPost = function(req, res){
-  console.log("name %s expertise %s", req.body.name, req.body.expertise);
-  var expert = new Expert({name: req.body.name, expertise: req.body.expertise});
-  expert.save();
-  res.redirect('/expertDetails/' + expert._id)
+exports.addEventPost = function(req, res){
+  var event = new Event({name: req.body.name, date: req.body.date, time: req.body.time});
+  event.save();
+  res.redirect('/editEvent/' + event._id);
+};
+
+exports.deleteEvent = function(req, res){
+  Event.findOne({_id: req.params.id}, function(error, event) {
+      event.remove();
+      res.redirect('/');
+    });
 };

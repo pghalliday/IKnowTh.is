@@ -1,6 +1,13 @@
 .hero-unit
-  h1 Consult an Expert
+  h1 Expert Q&A
   p
-    | Need help with your stuff?
-  p
-    a.btn(href='/book').btn-primary.btn-large Book a slot!
+    | Need help with your stuff? Book into one of our Q&A events!
+  - each event in events
+    p
+      | #{event.name}
+    p
+      | #{event.date}
+    p
+      | #{event.time}
+    p
+      a.btn(href='/event/#{event._id}').btn-primary.btn-large Reserve your place!

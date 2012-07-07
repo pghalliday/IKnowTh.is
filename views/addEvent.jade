@@ -1,0 +1,15 @@
+.hero-unit
+  h1 Want to organise a Q&A event?
+  p
+    form(id='event', action='/addEvent', method='post')
+      fieldset(data-role='controlgroup')
+        label(for='name') Name
+        input(id='name',name='name',type='text',value='',placeholder='Event Name')
+      fieldset(data-role='controlgroup')
+        label(for='date') Date
+        input(id='date',name='date',type='text',value='',placeholder='DD/MM/YYYY')
+      fieldset(data-role='controlgroup')
+        label(for='time') Time
+        input(id='time',name='date',type='text',value='',placeholder='hh:mm')
+  p
+    a.btn(href='', onclick='document.forms["event"].submit(); return false;').btn-primary.btn-large Register

@@ -34,10 +34,11 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
-app.get('/book', routes.book);
-app.get('/expertDetails/:id', routes.expertDetails);
-app.get('/registerExpert', routes.registerExpert);
-app.post('/registerExpert', routes.registerExpertPost);
+app.get('/editEvent/:id', routes.editEvent);
+app.get('/event/:id', routes.event);
+app.get('/addEvent', routes.addEvent);
+app.post('/addEvent', routes.addEventPost);
+app.get('/deleteEvent/:id', routes.deleteEvent);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function(){
