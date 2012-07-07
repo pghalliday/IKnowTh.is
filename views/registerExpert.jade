@@ -6,9 +6,9 @@
           form(id='expertDetails', action='/registerExpert', method='post')
             fieldset(data-role='controlgroup')
               label(for='name') Name
-              input(id='name',type='text',value='',placeholder='Your Name')
+              input(id='name',name='name',type='text',value='',placeholder='Your Name')
             fieldset(data-role='controlgroup')
               label(for='expertise') Name
-              input(id='expertise',type='text',value='',placeholder='Your Expertise')
+              input(id='expertise',name='expertise',type='text',value='',placeholder='Your Expertise')
         p
           a.btn(href='', onclick='document.forms["expertDetails"].submit(); return false;').btn-primary.btn-large Register
