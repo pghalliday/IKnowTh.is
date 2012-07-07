@@ -2,15 +2,16 @@
 
 
 # Deployment to local development
-Install Node
-Install Mongo, start Mongo server
-git, clone the directory
-command line to directory
-run 'npm install'
-run 'node app.js'
+* Install Node
+* Install Mongo, start Mongo server
+* use git to clone
+* go to command line at directory
+* run 'npm install'
+* run 'node app.js'
 
 # Deployment to Heroku
-heroku login
-heroku create
-git push heroku master
-heroku addons:add mongohq:free //start mongo
+* From command line:
+* heroku login
+* heroku create
+* git push heroku master
+* heroku addons:add mongohq:free //start mongo
