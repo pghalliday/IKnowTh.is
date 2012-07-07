@@ -3,6 +3,12 @@
       .hero-unit
         h1 So you're an expert are you?
         p
-          | Who are you?
+          form(id='expertDetails', action='/registerExpert', method='post')
+            fieldset(data-role='controlgroup')
+              label(for='name') Name
+              input(id='name',type='text',value='',placeholder='Your Name')
+            fieldset(data-role='controlgroup')
+              label(for='expertise') Name
+              input(id='expertise',type='text',value='',placeholder='Your Expertise')
         p
-          a.btn(href='/book').btn-primary.btn-large Register
+          a.btn(href='', onclick='document.forms["expertDetails"].submit(); return false;').btn-primary.btn-large Register

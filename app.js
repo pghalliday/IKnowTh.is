@@ -7,7 +7,7 @@ var express = require('express')
   , routes = require('./routes')
   , mongoose = require('mongoose');
 
-//mongoose.connect('mongodb://localhost/Hangout');
+mongoose.connect('mongodb://localhost/Hangout');
 
 var app = module.exports = express.createServer();
 
@@ -34,7 +34,9 @@ app.configure('production', function(){
 
 app.get('/', routes.index);
 app.get('/book', routes.book);
+app.get('/expertDetails/:id', routes.expertDetails);
 app.get('/registerExpert', routes.registerExpert);
+app.post('/registerExpert', routes.registerExpertPost);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function(){
