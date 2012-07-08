@@ -1,5 +1,12 @@
 .hero-unit
+  //script(src='http://staging.tokbox.com/v0.91/js/TB.min.js')
+  
+  //script(src='opentok-client.js')
+
   h1 #{event.name}
+  
+  //.video(id='videoscreen')
+  
   p
     | #{event.description}
   p
@@ -14,11 +21,14 @@
   - else
     - if (event.attendees.indexOf(user._id) != -1)
       p
-        a.btn(href='').btn-primary.btn-large Join        
+        a.btn(href='', onclick='openvideo').btn-primary.btn-large Join        
     - else
       p
         | Reserve Your Spot for 5 Euros!
       p
         a(href='/attendEvent/#{event._id}')
           img(src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif', align='left', style='margin-right:7px;')
+
+
+
     

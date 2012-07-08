@@ -31,6 +31,12 @@ everyauth.google
 var db = process.env.MONGOHQ_URL || 'mongodb://localhost/Hangout';
 mongoose.connect(db);
 
+var opentok = require('opentok');
+var opentokkey = '16542992';
+var opentoksecret = 'b1fb07ffc8a4809da90f836041ea82618d28808e';
+var ot = new opentok.OpenTokSDK(opentokkey, opentoksecret);
+
+
 var app = module.exports = express.createServer();
 
 // Configuration
