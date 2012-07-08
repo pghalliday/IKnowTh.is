@@ -4938,6 +4938,14 @@ a.badge:hover {
   color: #ffffff;
 }
 
+.event-list-thumbnail {
+  background-color: #eeccee;
+}
+
+.event-list-thumbnail-host {
+  background-color: #cceeee;
+}
+
 .event-list-item {
   padding: 15px;
   margin-bottom: 15px;
