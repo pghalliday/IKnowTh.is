@@ -4941,7 +4941,7 @@ a.badge:hover {
 .event-list-item {
   padding: 15px;
   margin-bottom: 15px;
-  background-color: #eeddee;
+  background-color: #eeccee;
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
@@ -4950,7 +4950,16 @@ a.badge:hover {
 .event-list-item-host {
   padding: 15px;
   margin-bottom: 15px;
-  background-color: #ddeeee;
+  background-color: #cceeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.event-list-item-attendee {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #eeeebb;
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;

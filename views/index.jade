@@ -13,6 +13,15 @@
             | #{event.time}
           p
             a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
+      - else if (event.attendees.indexOf(user._id) != -1)
+        .event-list-item-attendee
+          h2 #{event.name}
+          p
+            | #{event.date}
+          p
+            | #{event.time}
+          p
+            a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
       - else
         .event-list-item
           h2 #{event.name}
