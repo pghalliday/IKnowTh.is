@@ -3,16 +3,30 @@
   p
     | Need help with your stuff? Book into one of our Q&A events!
   - each event in events
-    .event-list-item
-      h2 #{event.name}
-      p
-        | #{event.date}
-      p
-        | #{event.time}
-      - if (everyauth.loggedIn)
-        - if (user._id == event.host)
+    - if (everyauth.loggedIn)
+      - if (event.host.equals(user._id))
+        .event-list-item-host
+          h2 #{event.name}
           p
-            a.btn(href='/event/#{event._id}').btn-primary.btn-large View
-        - else
+            | #{event.date}
           p
-            a.btn(href='/event/#{event._id}').btn-primary.btn-large View
+            | #{event.time}
+          p
+            a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
+      - else
+        .event-list-item
+          h2 #{event.name}
+          p
+            | #{event.date}
+          p
+            | #{event.time}
+          p
+            a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
+    - else
+      .event-list-item
+        h2 #{event.name}
+        p
+          | #{event.date}
+        p
+          | #{event.time}
+    

@@ -4,7 +4,7 @@
     | #{event.date}
   p
     | #{event.time}
-  - if (user._id.equals(event.host))
+  - if (event.host.equals(user._id))
     p
       a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
       &nbsp;
@@ -15,5 +15,8 @@
         a.btn(href='').btn-primary.btn-large Join        
     - else
       p
-        a.btn(href='/attendEvent/#{event._id}').btn-primary.btn-large Reserve Your Spot!
+        | Reserve Your Spot for 5 Euros!
+      p
+        a(href='/attendEvent/#{event._id}')
+          img(src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif', align='left', style='margin-right:7px;')
     

@@ -4947,6 +4947,15 @@ a.badge:hover {
           border-radius: 6px;
 }
 
+.event-list-item-host {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #ddeeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
 .hero-unit {
   padding: 60px;
   margin-bottom: 30px;
