@@ -1,7 +1,7 @@
 .hero-unit
   h1 Want to organise a Q&A event?
   p
-    form(id='event', action='/addEvent', method='post')
+    form(id='event', action='/addEvent', method='post', enctype='multipart/form-data')
       fieldset(data-role='controlgroup')
         label(for='name') Name
         input(id='name',name='name',type='text',value='',placeholder='Event Name')

@@ -60,6 +60,7 @@ app.configure('production', function(){
 app.get('/', routes.index);
 app.get('/editEvent/:id', routes.editEvent);
 app.get('/event/:id', routes.event);
+app.get('/event/:id/image', routes.eventImage);
 app.get('/newEvent', routes.newEvent);
 app.post('/addEvent', routes.addEvent);
 app.get('/deleteEvent/:id', routes.deleteEvent);

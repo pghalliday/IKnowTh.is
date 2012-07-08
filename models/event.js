@@ -4,7 +4,7 @@ var mongoose = require('mongoose')
 var eventSchema = new Schema({
     host      : Schema.ObjectId
   , name      : String
-  , image      : String
+  , image      : { data: Buffer, contentType: String }
   , description : String
   , date      : String
   , time      : String

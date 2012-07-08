@@ -1,6 +1,8 @@
 .hero-unit
   h1 #{event.name}
   p
+    img(src='/event/#{event._id}/image')
+  p
     | #{event.description}
   p
     | #{event.date}
