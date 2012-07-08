@@ -64,6 +64,7 @@ app.get('/newEvent', routes.newEvent);
 app.post('/addEvent', routes.addEvent);
 app.get('/deleteEvent/:id', routes.deleteEvent);
 app.get('/attendEvent/:id', routes.attendEvent);
+app.post('/startEvent/:id', routes.startEvent);
 
 everyauth.helpExpress(app);
 everyauth.everymodule.findUserById( function (userId, callback) {

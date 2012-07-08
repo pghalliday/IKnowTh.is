@@ -42,3 +42,11 @@ exports.attendEvent = function(req, res){
       res.redirect('/event/' + req.params.id);
     });
 };
+
+exports.startEvent = function(req, res){
+  Event.findOne({_id: req.params.id}, function(error, event) {
+      event.hangout = req.body.hangout;
+      event.save();
+      res.redirect('/event/' + req.params.id);
+    });
+};

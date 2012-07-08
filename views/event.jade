@@ -9,12 +9,22 @@
   - if (event.host.equals(user._id))
     p
       a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
-      &nbsp;
-      a.btn(href='').btn-primary.btn-large Start
+      form(id='hangout', action='/startEvent/#{event._id}', method='post')
+        fieldset(data-role='controlgroup')
+          label(for='hangout') Google Hangout
+          - if (event.hangout)
+            input(id='hangout',name='hangout',type='text',value='#{event.hangout}',placeholder='Hangout Address')
+          - else
+            input(id='hangout',name='hangout',type='text',value='',placeholder='Hangout Address')
+      - if (event.hangout)
+        a.btn(href='', onclick='document.forms["hangout"].submit(); return false;').btn-primary.btn-large Update
+      - else
+        a.btn(href='', onclick='document.forms["hangout"].submit(); return false;').btn-primary.btn-large Start
   - else
     - if (event.attendees.indexOf(user._id) != -1)
-      p
-        a.btn(href='').btn-primary.btn-large Join        
+      - if (event.hangout)
+        p
+          a.btn(href='#{event.hangout}', target='new').btn-primary.btn-large Join
     - else
       p
         | Reserve Your Spot for 5 Euros!
