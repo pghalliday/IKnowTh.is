@@ -4,5 +4,16 @@
     | #{event.date}
   p
     | #{event.time}
-  p
-    a.btn(href='').btn-primary.btn-large Reserve Your Spot!
+  - if (user._id.equals(event.host))
+    p
+      a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
+      &nbsp;
+      a.btn(href='').btn-primary.btn-large Start
+  - else
+    - if (event.attendees.indexOf(user._id) != -1)
+      p
+        a.btn(href='').btn-primary.btn-large Join        
+    - else
+      p
+        a.btn(href='/attendEvent/#{event._id}').btn-primary.btn-large Reserve Your Spot!
+    

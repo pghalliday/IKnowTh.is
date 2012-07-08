@@ -2,9 +2,11 @@ var mongoose = require('mongoose')
   , Schema = mongoose.Schema;
 
 var eventSchema = new Schema({
-    name  : String
-  , date  : String
-  , time  : String
+    host      : Schema.ObjectId
+  , name      : String
+  , date      : String
+  , time      : String
+  , attendees : [Schema.ObjectId]
 });
 
 module.exports = mongoose.model('Event', eventSchema);

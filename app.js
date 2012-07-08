@@ -60,11 +60,16 @@ app.configure('production', function(){
 app.get('/', routes.index);
 app.get('/editEvent/:id', routes.editEvent);
 app.get('/event/:id', routes.event);
-app.get('/addEvent', routes.addEvent);
-app.post('/addEvent', routes.addEventPost);
+app.get('/newEvent', routes.newEvent);
+app.post('/addEvent', routes.addEvent);
 app.get('/deleteEvent/:id', routes.deleteEvent);
+app.get('/attendEvent/:id', routes.attendEvent);
 
 everyauth.helpExpress(app);
+everyauth.everymodule.findUserById( function (userId, callback) {
+  User.findOne( {id: userId}, callback );
+  // callback has the signature, function (err, user) {...}
+});
 
 var port = process.env.PORT || 3000;
 app.listen(port, function(){

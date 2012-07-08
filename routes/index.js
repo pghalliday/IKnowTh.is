@@ -18,19 +18,27 @@ exports.editEvent = function(req, res){
     });
 };
 
-exports.addEvent = function(req, res){
-  res.render('addEvent', { title: '5Live' });
+exports.newEvent = function(req, res){
+  res.render('newEvent', { title: '5Live' });
 };
 
-exports.addEventPost = function(req, res){
-  var event = new Event({name: req.body.name, date: req.body.date, time: req.body.time});
+exports.addEvent = function(req, res){
+  var event = new Event({host: req.user._id, name: req.body.name, date: req.body.date, time: req.body.time});
   event.save();
-  res.redirect('/editEvent/' + event._id);
+  res.redirect('/event/' + event._id);
 };
 
 exports.deleteEvent = function(req, res){
   Event.findOne({_id: req.params.id}, function(error, event) {
       event.remove();
       res.redirect('/');
+    });
+};
+
+exports.attendEvent = function(req, res){
+  Event.findOne({_id: req.params.id}, function(error, event) {
+      event.attendees.push(req.user._id);
+      event.save();
+      res.redirect('/event/' + req.params.id);
     });
 };

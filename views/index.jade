@@ -3,12 +3,16 @@
   p
     | Need help with your stuff? Book into one of our Q&A events!
   - each event in events
-    p
-      | #{event.name}
-    p
-      | #{event.date}
-    p
-      | #{event.time}
-    - if (everyauth.loggedIn)
+    .event-list-item
+      h2 #{event.name}
       p
-        a.btn(href='/event/#{event._id}').btn-primary.btn-large Reserve your place!
+        | #{event.date}
+      p
+        | #{event.time}
+      - if (everyauth.loggedIn)
+        - if (user._id == event.host)
+          p
+            a.btn(href='/event/#{event._id}').btn-primary.btn-large View
+        - else
+          p
+            a.btn(href='/event/#{event._id}').btn-primary.btn-large View
