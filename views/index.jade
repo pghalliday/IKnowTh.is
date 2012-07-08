@@ -2,48 +2,48 @@
   h1 #{title}
   p
     | Need help with your stuff? Book into one of our Q&A events!
-  - each event in events
-    - if (everyauth.loggedIn)
-      - if (event.host.equals(user._id))
-        .event-list-item-host
-          h2 #{event.name}
-          p
-            | #{event.description}
-          p
-            | #{event.date}
-          p
-            | #{event.time}
-          p
-            a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
-      - else if (event.attendees.indexOf(user._id) != -1)
-        .event-list-item-attendee
-          h2 #{event.name}
-          p
-            | #{event.description}
-          p
-            | #{event.date}
-          p
-            | #{event.time}
-          p
-            a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
-      - else
-        .event-list-item
-          h2 #{event.name}
-          p
-            | #{event.description}
-          p
-            | #{event.date}
-          p
-            | #{event.time}
-          p
-            a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
-    - else
-      .event-list-item
-        h2 #{event.name}
-        p
-          | #{event.description}
-        p
-          | #{event.date}
-        p
-          | #{event.time}
-    
+  ul.thumbnails
+    - each event in events
+      li.span3
+        - if (everyauth.loggedIn)
+          - if (event.host.equals(user._id))
+            .thumbnail.event-list-thumbnail-host
+              img(src='http://placehold.it/260x180', alt='')
+              p #{event.name}
+              h5 #{event.description}
+
+              //img(src='https://si0.twimg.com/profile_images/943551175/me_as_frankenstein_2009_normal.jpg')
+              //h5 Host: Matt Feigal
+
+              
+
+              h5 #{event.date} , #{event.time}
+              h5 #{event.attendees} people attending
+
+              -if (everyauth.loggedIn)
+                a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
+          - else
+            .thumbnail.event-list-thumbnail
+              img(src='http://placehold.it/260x180', alt='')
+              p #{event.name}
+              h5 #{event.description}
+              h5 #{event.date} , #{event.time}
+              h5 #{event.attendees} people attending
+
+              -if (everyauth.loggedIn)
+                a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
+
+
+        - else
+          .thumbnail.event-list-thumbnail
+            img(src='http://placehold.it/260x180', alt='')
+            p #{event.name}
+            h5 #{event.description}
+            h5 #{event.date} , #{event.time}
+            h5 #{event.attendees} people attending
+
+            -if (everyauth.loggedIn)
+              a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
+        
+      
+      //TODO: clean up those jade thumbnail blocks, no copy-pasting code!
