@@ -8,7 +8,7 @@
         - if (everyauth.loggedIn)
           - if (event.host.equals(user._id))
             .thumbnail.event-list-thumbnail-host
-              img(src='http://placehold.it/260x180', alt='')
+              img(src='/event/#{event._id}/image', alt='', width='260')
               p #{event.name}
               h5 #{event.description}
 
@@ -24,7 +24,7 @@
                 a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
           - else
             .thumbnail.event-list-thumbnail
-              img(src='http://placehold.it/260x180', alt='')
+              img(src='/event/#{event._id}/image', alt='', width='260')
               p #{event.name}
               h5 #{event.description}
               h5 #{event.date} , #{event.time}
@@ -36,7 +36,7 @@
 
         - else
           .thumbnail.event-list-thumbnail
-            img(src='http://placehold.it/260x180', alt='')
+            img(src='/event/#{event._id}/image', alt='', width='260')
             p #{event.name}
             h5 #{event.description}
             h5 #{event.date} , #{event.time}

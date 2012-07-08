@@ -19,8 +19,7 @@ exports.eventImage = function(req, res){
       res.contentType(event.image.contentType);
       res.send(event.image.data);
     } else {
-      res.contentType('image/png');
-      res.sendfile('/eventDefault.png');
+      res.redirect('/img/eventDefault.png');
     }
   });
 };
