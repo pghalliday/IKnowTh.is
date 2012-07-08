@@ -8,6 +8,8 @@
         .event-list-item-host
           h2 #{event.name}
           p
+            | #{event.description}
+          p
             | #{event.date}
           p
             | #{event.time}
@@ -16,6 +18,8 @@
       - else if (event.attendees.indexOf(user._id) != -1)
         .event-list-item-attendee
           h2 #{event.name}
+          p
+            | #{event.description}
           p
             | #{event.date}
           p
@@ -26,6 +30,8 @@
         .event-list-item
           h2 #{event.name}
           p
+            | #{event.description}
+          p
             | #{event.date}
           p
             | #{event.time}
@@ -34,6 +40,8 @@
     - else
       .event-list-item
         h2 #{event.name}
+        p
+          | #{event.description}
         p
           | #{event.date}
         p

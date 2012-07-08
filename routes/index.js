@@ -23,7 +23,7 @@ exports.newEvent = function(req, res){
 };
 
 exports.addEvent = function(req, res){
-  var event = new Event({host: req.user._id, name: req.body.name, date: req.body.date, time: req.body.time});
+  var event = new Event({host: req.user._id, name: req.body.name, description: req.body.description, date: req.body.date, time: req.body.time});
   event.save();
   res.redirect('/event/' + event._id);
 };
