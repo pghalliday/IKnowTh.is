@@ -6,11 +6,14 @@ var express = require('express')
   , routes = require('./routes')
   , mongoose = require('mongoose')
   , everyauth = require('everyauth')
+  , fs = require('fs')
   , User = require('./models/user.js');
 
+eval(fs.readFileSync('config.js', encoding="ascii"));
+
 everyauth.google
-  .appId('961494665073.apps.googleusercontent.com')
-  .appSecret('FLayxITb7mxnnwNlqFja3BvA')
+  .appId(config.googleAppId)
+  .appSecret(config.googleAppSecret)
   .scope('https://www.googleapis.com/auth/userinfo.profile') // What you want access to
   .handleAuthCallbackError( function (req, res) {
     // If a user denies your app, Google will redirect the user to
