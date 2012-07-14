@@ -9,6 +9,16 @@ var express = require('express')
   , fs = require('fs')
   , User = require('./models/user.js');
 
+/*********************
+
+config is stored in a file called config.js in the following format:
+
+config = {
+    googleAppId: '<the google app id to use in authentication calls>'
+  , googleAppSecret: '<the google app secret to be used in authentication calls>'
+}
+
+*********************/
 eval(fs.readFileSync('config.js', encoding="ascii"));
 
 everyauth.google
