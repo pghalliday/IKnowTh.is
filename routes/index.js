@@ -3,13 +3,13 @@ var fs = require('fs');
 
 exports.index = function(req, res){
   Event.find(function(error, events) {
-    res.render('index', { title: '5Live', events: events });
+    res.render('index', { title: config.title, events: events });
   });
 };
 
 exports.event = function(req, res){
   Event.findOne({_id: req.params.id}, function(error, event) {
-        res.render('event', { title: '5Live', event: event });
+        res.render('event', { title: config.title, googleHangoutUrl: config.googleHangoutUrl, googleProjectId: config.googleProjectId, event: event });
     });
 };
 
@@ -26,12 +26,12 @@ exports.eventImage = function(req, res){
 
 exports.editEvent = function(req, res){
   Event.findOne({_id: req.params.id}, function(error, event) {
-        res.render('editEvent', { title: '5Live', event: event });
+        res.render('editEvent', { title: config.title, event: event });
     });
 };
 
 exports.newEvent = function(req, res){
-  res.render('newEvent', { title: '5Live' });
+  res.render('newEvent', { title: config.title });
 };
 
 exports.addEvent = function(req, res){
@@ -77,6 +77,12 @@ exports.startEvent = function(req, res){
   Event.findOne({_id: req.params.id}, function(error, event) {
       event.hangout = req.body.hangout;
       event.save();
-      res.redirect('/event/' + req.params.id);
+      res.send('{"msg" : "Event Started"}');
     });
+};
+
+exports.hangout = function(req, res){
+  Event.find(function(error, events) {
+    res.render('hangout', { layout: false, title: config.title });
+  });
 };

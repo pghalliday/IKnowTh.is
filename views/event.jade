@@ -10,23 +10,16 @@
     | #{event.time}
   - if (event.host.equals(user._id))
     p
+      a(href='#{googleHangoutUrl}?authuser=0&gid=#{googleProjectId}&gd=#{event._id}', target='new')
+        img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Start your Hangout')
+    p
       a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
-      form(id='hangout', action='/startEvent/#{event._id}', method='post')
-        fieldset(data-role='controlgroup')
-          label(for='hangout') Google Hangout
-          - if (event.hangout)
-            input(id='hangout',name='hangout',type='text',value='#{event.hangout}',placeholder='Hangout Address')
-          - else
-            input(id='hangout',name='hangout',type='text',value='',placeholder='Hangout Address')
-      - if (event.hangout)
-        a.btn(href='', onclick='document.forms["hangout"].submit(); return false;').btn-primary.btn-large Update
-      - else
-        a.btn(href='', onclick='document.forms["hangout"].submit(); return false;').btn-primary.btn-large Start
   - else
     - if (event.attendees.indexOf(user._id) != -1)
       - if (event.hangout)
         p
-          a.btn(href='#{event.hangout}', target='new').btn-primary.btn-large Join
+          a(href='#{event.hangout}', target='new')
+            img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Join the Hangout')
     - else
       p
         | Reserve Your Spot for 5 Euros!

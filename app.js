@@ -14,12 +14,16 @@ var express = require('express')
 config is stored in a file called config.js in the following format:
 
 config = {
-    googleAppId: '<the google app id to use in authentication calls>'
-  , googleAppSecret: '<the google app secret to be used in authentication calls>'
+    title: '<The application title>'
+  , googleAppId: '<From the google API console for authentication>'
+  , googleAppSecret: '<From the google API console for authentication>'
+  , googleProjectId: <From the google API console for the hangout app>'
+  , googleHangoutUrl: 'https://hangoutsapi.talkgadget.google.com/hangouts' // for the sandbox or 'https://plus.google.com/hangouts/_' for a published hangout app
+  , googleHangoutIFrameUrl: 'http://<host name>/hangout' // Only used if the hangout URL set in the hangout app in the google API console is set to http://<host name>/hangoutxml
 }
-
 *********************/
 eval(fs.readFileSync('config.js', encoding="ascii"));
+routes.config = config;
 
 everyauth.google
   .appId(config.googleAppId)
@@ -68,7 +72,6 @@ app.configure('production', function(){
 });
 
 // Routes
-
 app.get('/', routes.index);
 app.get('/editEvent/:id', routes.editEvent);
 app.get('/event/:id', routes.event);
@@ -78,6 +81,13 @@ app.post('/addEvent', routes.addEvent);
 app.get('/deleteEvent/:id', routes.deleteEvent);
 app.get('/attendEvent/:id', routes.attendEvent);
 app.post('/startEvent/:id', routes.startEvent);
+app.get('/hangout', routes.hangout);
+
+// hangout xml route
+app.get('/hangoutxml', function(req, res) {
+	var xml = fs.readFileSync('hangout.xml');
+	xml = xml.replace('IFRAMEURL', config.googleHangoutIFrameUrl);
+});
 
 everyauth.helpExpress(app);
 everyauth.everymodule.findUserById( function (userId, callback) {
