@@ -85,8 +85,8 @@ app.get('/hangout', routes.hangout);
 
 // hangout xml route
 app.get('/hangoutxml', function(req, res) {
-	var xml = fs.readFileSync('hangout.xml', encoding='ascii');
-	xml = xml.replace('IFRAMEURL', config.googleHangoutIFrameUrl);
+	res.contentType('application/xml; charset=UTF-8');
+	res.send(fs.readFileSync('hangout.xml', encoding='utf8').replace('IFRAMEURL', config.googleHangoutIFrameUrl));
 });
 
 everyauth.helpExpress(app);
