@@ -4,10 +4,12 @@
 
 var express = require('express')
   , routes = require('./routes')
+  , config = require('./config.js').properties
   , mongoose = require('mongoose')
   , everyauth = require('everyauth')
   , fs = require('fs')
   , User = require('./models/user.js');
+
 
 /*********************
 
@@ -22,8 +24,6 @@ config = {
   , googleHangoutIFrameUrl: 'http://<host name>/hangout' // Only used if the hangout URL set in the hangout app in the google API console is set to http://<host name>/hangoutxml
 }
 *********************/
-eval(fs.readFileSync('config.js', encoding="ascii"));
-routes.config = config;
 
 everyauth.google
   .appId(config.googleAppId)
@@ -43,7 +43,7 @@ everyauth.google
     return promise;
   })
   .redirectPath('/');
-  
+
 var db = process.env.MONGOHQ_URL || 'mongodb://localhost/Hangout';
 mongoose.connect(db);
 
@@ -73,21 +73,18 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', routes.index);
-app.get('/editEvent/:id', routes.editEvent);
 app.get('/event/:id', routes.event);
 app.get('/event/:id/image', routes.eventImage);
 app.get('/newEvent', routes.newEvent);
 app.post('/addEvent', routes.addEvent);
 app.get('/deleteEvent/:id', routes.deleteEvent);
-app.get('/attendEvent/:id', routes.attendEvent);
+app.get('/attendEvent/:eventId/:userId', routes.attendEvent);
+app.get('/attendEventContinue/:eventId/:userId', routes.attendEventContinue);
+app.get('/attendEventCancel/:eventId/:userId', routes.attendEventCancel);
 app.post('/startEvent/:id', routes.startEvent);
 app.get('/hangout', routes.hangout);
-
-// hangout xml route
-app.get('/hangoutxml', function(req, res) {
-	res.contentType('application/xml; charset=UTF-8');
-	res.send(fs.readFileSync('hangout.xml', encoding='utf8').replace('IFRAMEURL', config.googleHangoutIFrameUrl));
-});
+app.get('/hangoutxml', routes.hangoutxml);
+app.get('/resetEvent/:id', routes.resetEvent);
 
 everyauth.helpExpress(app);
 everyauth.everymodule.findUserById( function (userId, callback) {

@@ -1,14 +1,13 @@
 var mongoose = require('mongoose')
   , Schema = mongoose.Schema;
 
-var userSchema = new Schema({
+var User = new Schema({
     id    : String
   , name  : String
 });
 
-var User = module.exports = mongoose.model('User', userSchema);
-User.findOrCreateFromGoogleData = function(googleUserMetadata, promise) {
-  User.findOne({id: googleUserMetadata.id}, function(error, user) {
+User.statics.findOrCreateFromGoogleData = function(googleUserMetadata, promise) {
+  this.findOne({id: googleUserMetadata.id}, function(error, user) {
     if (error) {
       promise.fail();
     } else {
@@ -22,3 +21,5 @@ User.findOrCreateFromGoogleData = function(googleUserMetadata, promise) {
     }
   });
 }
+
+module.exports = mongoose.model('User', User);

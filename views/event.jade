@@ -15,16 +15,26 @@
     p
       a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
   - else
-    - if (event.attendees.indexOf(user._id) != -1)
-      - if (event.hangout)
+    - var attendee = event.getAttendee(user._id);
+    - if (attendee != null)
+      - if (attendee.confirmed)
+        - if (event.hangout)
+          p
+            a(href='#{event.hangout}', target='new')
+              img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Join the Hangout')
+        - else
+          p
+            | Your payment is confirmed (Thank you!), now waiting for hangout to start
+      - else
         p
-          a(href='#{event.hangout}', target='new')
-            img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Join the Hangout')
+          | Your spot has been reserved, now waiting for payment confirmation
     - else
-      p
-        | Reserve Your Spot for 5 Euros!
-      p
-        a(href='/attendEvent/#{event._id}')
-          img(src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif', align='left', style='margin-right:7px;')
-
-    
+      - if (event.attendees.length < maximumAttendees)
+        p
+          | Reserve Your Spot for 5 Euros!
+        p
+          a(href='/attendEvent/#{event._id}/#{user._id}')
+            img(src='#{paypalUrl}/en_US/i/btn/btn_xpressCheckout.gif', align='left', style='margin-right:7px;')
+      - else
+        p
+          | Event Full!
