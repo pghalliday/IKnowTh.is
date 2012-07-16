@@ -10,21 +10,6 @@ var express = require('express')
   , fs = require('fs')
   , User = require('./models/user.js');
 
-
-/*********************
-
-config is stored in a file called config.js in the following format:
-
-config = {
-    title: '<The application title>'
-  , googleAppId: '<From the google API console for authentication>'
-  , googleAppSecret: '<From the google API console for authentication>'
-  , googleProjectId: <From the google API console for the hangout app>'
-  , googleHangoutUrl: 'https://hangoutsapi.talkgadget.google.com/hangouts' // for the sandbox or 'https://plus.google.com/hangouts/_' for a published hangout app
-  , googleHangoutIFrameUrl: 'http://<host name>/hangout' // Only used if the hangout URL set in the hangout app in the google API console is set to http://<host name>/hangoutxml
-}
-*********************/
-
 everyauth.google
   .appId(config.googleAppId)
   .appSecret(config.googleAppSecret)

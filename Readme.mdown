@@ -1,5 +1,28 @@
 # Hangout Readme
 
+# Notes on config.js
+
+The secret configuration information needs to be present in a file in the root of the project called config.js.
+This file should have the following contents:
+
+var payflowpro = require('paynode').use('payflowpro');
+
+exports.properties = {
+    title: '<The application title>'
+  , superUsers: ['<Google user ID>', '<Google user ID>', etc]
+  , isSuperUser: function(googleUserId) {return (this.superUsers.indexOf(googleUserId) != -1);}
+  , baseUrl: '<The base URL for the instance>'
+  , maximumAttendees: <Maximum number of attendees: probably 7 as there is a host and only 7 other spots available in google hangouts>
+  , googleAppId: '<Google App ID for authentication calls>'
+  , googleAppSecret: '<Google App secret for authentication calls>'
+  , googleProjectId: '<Google project ID for hangout application>'
+  , googleHangoutUrl: '<Hangout URL to use, ie. sandbox or live URL>'
+  , paypalUrl: '<Paypal URL to use, ie. sandbox or live>'
+  , paypalLevel: <paynode/payflowpro level, ie. sandbox or live>
+  , paypalUser: '<Paypal API user>'
+  , paypalPassword: '<Paypal API password>'
+  , paypalSignature: '<Paypal API signature>'
+};
 
 # Deployment to local development
 * Install Node
