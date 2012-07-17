@@ -1,24 +1,30 @@
-var mongoose = require('mongoose')
-  , Schema = mongoose.Schema;
+var mongoose = require('mongoose'),
+	Schema = mongoose.Schema;
 
-var Attendee = new Schema({
-	  userId: Schema.ObjectId
-	, paypalToken: String
-	, confirmed: Boolean	
-})
-
-var Event = new Schema({
-    host      : Schema.ObjectId
-  , name      : String
-  , image      : { data: Buffer, contentType: String }
-  , description : String
-  , date      : String
-  , time      : String
-  , attendees : [Attendee]
-  , hangout : String
+var AttendeeSchema = new Schema({
+	userId: Schema.ObjectId,
+	paypalToken: String,
+	confirmed: Boolean
 });
 
-Event.methods.getAttendee = function(userId) {
+var EventSchema = new Schema({
+	host: Schema.ObjectId,
+	name: String,
+	image: {
+		data: Buffer,
+		contentType: String
+	},
+	description: String,
+	date: String,
+	time: String,
+	attendees: [AttendeeSchema],
+	hangout: String
+});
+
+var Event = mongoose.model('Event', EventSchema);
+module.exports = Event;
+
+Event.prototype.getAttendee = function(userId) {
 	var attendee = null;
 	var index;
 	for (index = 0; index < this.attendees.length; index++) {
@@ -30,8 +36,6 @@ Event.methods.getAttendee = function(userId) {
 	return attendee;
 };
 
-Event.methods.resetAttendees = function() {
+Event.prototype.resetAttendees = function() {
 	this.attendees = [];
 };
-
-module.exports = mongoose.model('Event', Event);
