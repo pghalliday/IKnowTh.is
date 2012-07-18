@@ -1,8 +1,15 @@
-var mongoose = require('mongoose'),
-	Event = require('./event.js'),
-	User = require('./user.js');
+var mongoose = require('./testUtils/mongooseTestWrapper.js'),
+	Event,
+	User;
 
 exports.setUp = function(callback) {
+	// reset the schemas to ensure that any changes are picked up by the mongoose singleton
+	mongoose.resetSchemas();
+	
+	// add the schemas back again
+	Event = require('./event.js');
+	User = require('./user.js');
+	
 	// connect to a test database and drop all the users and events from it
 	mongoose.connect('mongodb://localhost/UnitTest_Hangout_Event');
 	User.remove({}, function(err) {
@@ -13,7 +20,7 @@ exports.setUp = function(callback) {
 };
 
 exports.tearDown = function(callback) {
-	mongoose.connection.close();
+	mongoose.disconnect();
 	callback();
 };
 
@@ -70,14 +77,15 @@ exports.resetAttendees = function(test) {
 	test.done();
 };
 
-exports.testPrototypeAdditionsWorkWithRetrievedInstances = function(test) {
-	test.expect(2);
+exports.testMethodsWorkWithRetrievedInstances = function(test) {
+	test.expect(3);
 	var user = new User({
 		id: 'testuser',
 		name: 'test user'
 	});
 	user.save();
 	var event = new Event({
+		test: 'hello',
 		name: 'test'
 	});
 	event.save();
@@ -92,6 +100,7 @@ exports.testPrototypeAdditionsWorkWithRetrievedInstances = function(test) {
 		} else {
 			if (foundEvent) {
 				test.ok(event._id.equals(foundEvent._id));
+				test.equal(event.test, 'hello');
 				var attendee = event.getAttendee(user._id);
 				test.ok(attendee.userId.equals(user._id));
 				test.done();

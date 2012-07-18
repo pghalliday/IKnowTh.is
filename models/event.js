@@ -8,6 +8,7 @@ var AttendeeSchema = new Schema({
 });
 
 var EventSchema = new Schema({
+	test: String,
 	host: Schema.ObjectId,
 	name: String,
 	image: {
@@ -21,10 +22,7 @@ var EventSchema = new Schema({
 	hangout: String
 });
 
-var Event = mongoose.model('Event', EventSchema);
-module.exports = Event;
-
-Event.prototype.getAttendee = function(userId) {
+EventSchema.methods.getAttendee = function(userId) {
 	var attendee = null;
 	var index;
 	for (index = 0; index < this.attendees.length; index++) {
@@ -36,6 +34,8 @@ Event.prototype.getAttendee = function(userId) {
 	return attendee;
 };
 
-Event.prototype.resetAttendees = function() {
+EventSchema.methods.resetAttendees = function() {
 	this.attendees = [];
 };
+
+module.exports = mongoose.model('Event', EventSchema);

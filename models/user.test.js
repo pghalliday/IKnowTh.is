@@ -1,7 +1,13 @@
-var mongoose = require('mongoose'),
-	User = require('./user.js');
+var mongoose = require('./testUtils/mongooseTestWrapper.js'),
+	User;
 
 exports.setUp = function(callback) {
+	// reset the schemas to ensure that any changes are picked up by the mongoose singleton
+	mongoose.resetSchemas();
+
+	// add the schemas back again
+	User = require('./user.js');
+
 	// connect to a test database and drop all the users from it
 	mongoose.connect('mongodb://localhost/UnitTest_Hangout_User');
 	User.remove({}, function(err) {

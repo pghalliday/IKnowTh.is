@@ -6,11 +6,8 @@ var UserSchema = new Schema({
 	name: String
 });
 
-var User = mongoose.model('User', UserSchema);
-module.exports = User;
-
-User.findOrCreateFromGoogleData = function(googleUserMetadata, promise) {
-	User.findOne({
+UserSchema.statics.findOrCreateFromGoogleData = function(googleUserMetadata, promise) {
+	this.findOne({
 		id: googleUserMetadata.id
 	}, function(error, user) {
 		if (error) {
@@ -29,3 +26,5 @@ User.findOrCreateFromGoogleData = function(googleUserMetadata, promise) {
 		}
 	});
 };
+
+module.exports = mongoose.model('User', UserSchema);
