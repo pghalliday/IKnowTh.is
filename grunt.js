@@ -44,7 +44,6 @@ module.exports = function(grunt) {
         ]
       }
     },
-    uglify: {}
   });
 
   // Default task.
