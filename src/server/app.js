@@ -57,6 +57,7 @@ app.configure('production', function() {
 
 // Routes
 app.get('/', routes.index);
+app.get('/error', routes.error);
 app.get('/event/:id', routes.event);
 app.get('/event/:id/image', routes.eventImage);
 app.get('/newEvent', routes.newEvent);

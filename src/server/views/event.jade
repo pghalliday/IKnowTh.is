@@ -15,7 +15,7 @@
     p
       a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
   - else
-    - var attendee = event.getAttendee(user._id);
+    - var attendee = event.getAttendee(user);
     - if (attendee != null)
       - if (attendee.confirmed)
         - if (event.hangout)
