@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
   // Add our custom tasks.
   // These include:
-  //		mocha - Run unit tests with Mocha
+  //		test - Run unit tests with Mocha (overrides the nodeunit test task)
   grunt.loadTasks('src/grunt');
 
   // Project configuration.
@@ -14,12 +14,12 @@ module.exports = function(grunt) {
     lint: {
       files: ['grunt.js', 'src/grunt/**/*.js', 'src/server/**/*.js']
     },
-    mocha: {
-      files: ['src/server/**/*.js'] // pass in all files and let mocha find the tests (this is so that they are all removed from the require cache)
+    test: {
+      files: ['src/server/**/*.test.js']
     },
     watch: {
       files: ['grunt.js', 'src/grunt/**/*.js', 'src/server/**/*.js'],
-      tasks: 'lint mocha'
+      tasks: 'lint test'
     },
     jshint: {
       options: {
@@ -44,9 +44,14 @@ module.exports = function(grunt) {
         ]
       }
     },
+    mocha: {
+      options: {
+        reporter: 'nyan'        
+      },
+    }
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint mocha');
+  grunt.registerTask('default', 'lint test');
 
 };

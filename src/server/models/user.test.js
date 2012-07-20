@@ -1,18 +1,16 @@
 describe('User', function() {
-  var mongoose = require('./testUtils/mongoose.js'),
+  var mongoose = require('mongoose'),
       should = require('should'),
-      User, Event;
+      User = require('./user.js'),
+      Event = require('./event.js');
 
   before(function(done) {
-    // reset the schemas to ensure that any changes are picked up by the mongoose singleton
-    mongoose.resetSchemas();
-
-    // add the schemas back again
-    User = require('./user.js');
-    Event = require('./event.js');
-
     // connect to a test database
     mongoose.connect('mongodb://localhost/UnitTest_Hangout_Event', done);
+  });
+
+  after(function(done) {
+    mongoose.disconnect(done);
   });
 
   beforeEach(function(done) {
@@ -295,9 +293,5 @@ describe('User', function() {
         });
       });
     });
-  });
-
-  after(function(done) {
-    mongoose.disconnect(done);
   });
 });

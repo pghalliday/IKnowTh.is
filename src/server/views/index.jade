@@ -11,7 +11,6 @@
               img(src='/event/#{event._id}/image', alt='', width='260')
               p #{event.name}
               h5 #{event.description}
-
               h5 #{event.date} , #{event.time}
               h5 #{event.attendees.length} people attending
 
@@ -27,7 +26,6 @@
 
               -if (everyauth.loggedIn)
                 a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
-
 
         - else
           .thumbnail.event-list-thumbnail
