@@ -1,0 +1,40 @@
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+  font-family: "Pacifico", cursive;
+}
+
+.event-list-thumbnail {
+  background-color: #eeccee;
+}
+
+.event-list-thumbnail-host {
+  background-color: #cceeee;
+}
+
+.event-list-item {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #eeccee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.event-list-item-host {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #cceeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.event-list-item-attendee {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #eeeebb;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
