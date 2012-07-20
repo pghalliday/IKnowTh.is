@@ -10,24 +10,6 @@ var paypalClient = payflowpro.createClient({
   signature: config.paypalSignature
 });
 
-exports.index = function(req, res) {
-  Event.find(function(error, events) {
-    if (error) {
-      // TODO: render a standard error?
-      console.log(new Error('Failed to find events'));
-      console.log(error);
-      res.render('error', {
-        title: config.title
-      });
-    } else {
-      res.render('index', {
-        title: config.title,
-        events: events
-      });
-    }
-  });
-};
-
 exports.event = function(req, res) {
   Event.findOne({
     _id: req.params.id
@@ -320,18 +302,6 @@ exports.startEvent = function(req, res) {
       });
     }
   });
-};
-
-exports.hangout = function(req, res) {
-  res.render('hangout', {
-    layout: false,
-    title: config.title
-  });
-};
-
-exports.hangoutxml = function(req, res) {
-  res.contentType('application/xml; charset=UTF-8');
-  res.send(fs.readFileSync('hangout.xml', 'utf8').replace('IFRAMEURL', config.baseUrl + '/hangout'));
 };
 
 exports.resetEvent = function(req, res) {

@@ -8,6 +8,11 @@ var AttendeeSchema = new Schema({
   confirmed: Boolean
 });
 
+var PendingPaymentsSchema = new Schema({
+  userId: {type: Schema.ObjectId, ref: 'User'},
+  paypalToken: String,
+});
+
 var EventSchema = new Schema({
   host: {type: Schema.ObjectId, ref: 'User'},
   name: String,
@@ -19,6 +24,7 @@ var EventSchema = new Schema({
   date: String,
   time: String,
   attendees: [AttendeeSchema],
+  pendingPayments: [PendingPaymentsSchema],
   hangout: String
 });
 

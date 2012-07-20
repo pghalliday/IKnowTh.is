@@ -3,7 +3,9 @@
  */
 
 var express = require('express'),
-    routes = require('./routes'),
+    homeRoutes = require('./routes/home.js'),
+    eventRoutes = require('./routes/event.js'),
+    hangoutRoutes = require('./routes/hangout.js'),
     config = require('./config.js').properties,
     mongoose = require('mongoose'),
     mongooseAuth = require('mongoose-auth'),
@@ -41,20 +43,19 @@ app.configure('production', function() {
 });
 
 // Routes
-app.get('/', routes.index);
-app.get('/error', routes.error);
-app.get('/event/:id', routes.event);
-app.get('/event/:id/image', routes.eventImage);
-app.get('/newEvent', routes.newEvent);
-app.post('/addEvent', routes.addEvent);
-app.get('/deleteEvent/:id', routes.deleteEvent);
-app.get('/attendEvent/:eventId/:userId', routes.attendEvent);
-app.get('/attendEventContinue/:eventId/:userId', routes.attendEventContinue);
-app.get('/attendEventCancel/:eventId/:userId', routes.attendEventCancel);
-app.post('/startEvent/:id', routes.startEvent);
-app.get('/hangout', routes.hangout);
-app.get('/hangoutxml', routes.hangoutxml);
-app.get('/resetEvent/:id', routes.resetEvent);
+app.get('/', homeRoutes.home);
+app.get('/event/:id', eventRoutes.event);
+app.get('/event/:id/image', eventRoutes.eventImage);
+app.get('/newEvent', eventRoutes.newEvent);
+app.post('/addEvent', eventRoutes.addEvent);
+app.get('/deleteEvent/:id', eventRoutes.deleteEvent);
+app.get('/attendEvent/:eventId/:userId', eventRoutes.attendEvent);
+app.get('/attendEventContinue/:eventId/:userId', eventRoutes.attendEventContinue);
+app.get('/attendEventCancel/:eventId/:userId', eventRoutes.attendEventCancel);
+app.post('/startEvent/:id', eventRoutes.startEvent);
+app.get('/hangout', hangoutRoutes.hangout);
+app.get('/hangoutxml', hangoutRoutes.hangoutxml);
+app.get('/resetEvent/:id', eventRoutes.resetEvent);
 
 mongooseAuth.helpExpress(app);
 
