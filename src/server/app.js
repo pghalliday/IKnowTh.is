@@ -6,23 +6,9 @@ var express = require('express'),
     routes = require('./routes'),
     config = require('./config.js').properties,
     mongoose = require('mongoose'),
-    everyauth = require('everyauth'),
+    mongooseAuth = require('mongoose-auth'),
     fs = require('fs'),
     User = require('./models/user.js');
-
-everyauth.google.appId(config.googleAppId).appSecret(config.googleAppSecret).scope('https://www.googleapis.com/auth/userinfo.profile') // What you want access to
-.handleAuthCallbackError(function(req, res) {
-  // If a user denies your app, Google will redirect the user to
-  // /auth/google/callback?error=access_denied
-  // This configurable route handler defines how you want to respond to
-  // that.
-  // If you do not configure this, everyauth renders a default fallback
-  // view notifying the user that their authentication failed and why.
-}).findOrCreateUser(function(session, accessToken, accessTokenExtra, googleUserMetadata) {
-  var promise = this.Promise();
-  User.findOrCreateFromGoogleData(googleUserMetadata, promise);
-  return promise;
-}).redirectPath('/');
 
 var db = process.env.MONGOHQ_URL || 'mongodb://localhost/Hangout';
 mongoose.connect(db);
@@ -38,9 +24,8 @@ app.configure(function() {
   app.use(express.session({
     secret: 'this is a secret'
   }));
-  app.use(everyauth.middleware());
+  app.use(mongooseAuth.middleware());
   app.use(express.methodOverride());
-  app.use(app.router);
   app.use(express.static(__dirname + '/../static'));
 });
 
@@ -71,13 +56,7 @@ app.get('/hangout', routes.hangout);
 app.get('/hangoutxml', routes.hangoutxml);
 app.get('/resetEvent/:id', routes.resetEvent);
 
-everyauth.helpExpress(app);
-everyauth.everymodule.findUserById(function(userId, callback) {
-  User.findOne({
-    id: userId
-  }, callback);
-  // callback has the signature, function (err, user) {...}
-});
+mongooseAuth.helpExpress(app);
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {

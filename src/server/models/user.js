@@ -1,37 +1,30 @@
 var mongoose = require('mongoose'),
+    mongooseAuth = require('mongoose-auth'),
+    config = require('../config.js').properties,
     Schema = mongoose.Schema,
-    Event = require('./event.js');
+    Event = require('./event.js'),
+    User;
 
-var UserSchema = new Schema({
-  id: String,
-  name: String,
-});
+var UserSchema = new Schema({});
 
-UserSchema.statics.findOrCreateFromGoogleData = function(googleUserMetadata, promise) {
-  this.findOne({
-    id: googleUserMetadata.id
-  }, function(error, user) {
-    if (error) {
-      promise.fail(error);
-    } else {
-      if (user) {
-        promise.fulfill(user);
-      } else {
-        var newUser = new(mongoose.model('User', UserSchema))({
-          id: googleUserMetadata.id,
-          name: googleUserMetadata.name
-        });
-        newUser.save(function(error, user) {
-          if (error) {
-            promise.fail(error);
-          } else {
-            promise.fulfill(user);
-          }
-        });
+UserSchema.plugin(mongooseAuth, {
+  everymodule: {
+    everyauth: {
+      User: function() {
+        return User;
       }
     }
-  });
-};
+  },
+  google: {
+    everyauth: {
+      myHostname: config.baseUrl,
+      appId: config.googleAppId,
+      appSecret: config.googleAppSecret,
+      redirectPath: '/',
+      scope: 'https://www.googleapis.com/auth/userinfo.profile'
+    }
+  }
+});
 
 UserSchema.methods.host = function(eventData, fn) {
   eventData.host = this;
@@ -51,4 +44,5 @@ UserSchema.methods.getAttendedEvents = function(fn) {
   Event.attendedBy(this).find({}, fn);
 };
 
-module.exports = mongoose.model('User', UserSchema);
+User = mongoose.model('User', UserSchema);
+module.exports = User;
