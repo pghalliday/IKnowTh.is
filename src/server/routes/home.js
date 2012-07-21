@@ -1,4 +1,5 @@
 var Event = require('../models/event.js'),
+    User = require('../models/user.js'),
     config = require('../config.js').properties;
 
 exports.home = function(req, res) {
@@ -17,4 +18,32 @@ exports.home = function(req, res) {
       });
     }
   });
+};
+
+exports.resetDatabase = function(req, res) {
+  if (config.isSuperUser(req.user)) {
+    Event.remove({}, function(error) {
+      if (error) {
+        // TODO: try again?
+        console.log((new Error('Failed to remove the events')));
+        console.log(error);
+        res.redirect('/');  
+      } else {
+        User.remove({}, function(error) {
+          if (error) {
+            // TODO: try again?
+            console.log((new Error('Failed to remove the users')));
+            console.log(error);
+          } else {
+            console.log('Database has been reset!');
+          }
+          res.redirect('/');  
+        });
+      }      
+    });
+  } else {
+    // TODO: send unauthorised users back to the home page?
+    console.log((new Error('Someone not authorised tried to reset the users!')));
+    res.redirect('/');
+  }
 };

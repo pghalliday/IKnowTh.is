@@ -21,8 +21,7 @@ var EventSchema = new Schema({
     contentType: String
   },
   description: String,
-  date: String,
-  time: String,
+  date: Date,
   attendees: [AttendeeSchema],
   pendingPayments: [PendingPaymentsSchema],
   hangout: String

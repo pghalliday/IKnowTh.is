@@ -4,6 +4,7 @@
 
 var express = require('express'),
     homeRoutes = require('./routes/home.js'),
+    userRoutes = require('./routes/user.js'),
     eventRoutes = require('./routes/event.js'),
     hangoutRoutes = require('./routes/hangout.js'),
     config = require('./config.js').properties,
@@ -56,6 +57,8 @@ app.post('/startEvent/:id', eventRoutes.startEvent);
 app.get('/hangout', hangoutRoutes.hangout);
 app.get('/hangoutxml', hangoutRoutes.hangoutxml);
 app.get('/resetEvent/:id', eventRoutes.resetEvent);
+app.get('/resetEvents', eventRoutes.resetEvents);
+app.get('/resetDatabase', homeRoutes.resetDatabase);
 
 mongooseAuth.helpExpress(app);
 

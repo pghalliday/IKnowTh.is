@@ -1,13 +1,17 @@
+- if (event.date)
+  script
+    $(function() {
+      $('#date}').text($.format.date((new Date(#{event.date.valueOf()})), 'dd-MMM-yyyy hh:mm a'));
+    });
 .hero-unit
   h1 #{event.name}
   p
     img(src='/event/#{event._id}/image', width='260')
   p
     | #{event.description}
+  p(id='date')
+    | No date and time!
   p
-    | #{event.date}
-  p
-    | #{event.time}
   - if (event.host.equals(user._id))
     p
       a(href='#{googleHangoutUrl}?authuser=0&gid=#{googleProjectId}&gd=#{event._id}', target='new')

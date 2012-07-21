@@ -36,8 +36,7 @@ describe('User', function() {
           user.host({
             name: 'test event',
             description: 'test event description',
-            date: 'date',
-            time: 'time'
+            date: 1342818000
           }, function(err, event) {
             if (err) {
               done(err);
@@ -45,8 +44,7 @@ describe('User', function() {
               event.should.have.property('host', user._id);
               event.should.have.property('name', 'test event');
               event.should.have.property('description', 'test event description');
-              event.should.have.property('date', 'date');
-              event.should.have.property('time', 'time');
+              event.should.have.property('date').with.eql(new Date(1342818000));
               event.should.have.property('image');
               event.image.should.not.have.property('data').and.should.not.have.property('contentType');
               event.should.not.have.property('hangout');
@@ -84,8 +82,7 @@ describe('User', function() {
               user1.host({
                 name: 'test event 1',
                 description: 'test event description',
-                date: 'date',
-                time: 'time'
+                date: 1342818000
               }, function(err, event) {
                 if (err) {
                   done(err);
@@ -94,8 +91,7 @@ describe('User', function() {
                   user1.host({
                     name: 'test event 2',
                     description: 'test event description',
-                    date: 'date',
-                    time: 'time'
+                    date: 1342818000
                   }, function(err, event) {
                     if (err) {
                       done(err);
@@ -104,8 +100,7 @@ describe('User', function() {
                       user1.host({
                         name: 'test event 3',
                         description: 'test event description',
-                        date: 'date',
-                        time: 'time'
+                        date: 1342818000
                       }, function(err, event) {
                         if (err) {
                           done(err);

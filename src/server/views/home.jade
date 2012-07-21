@@ -4,6 +4,11 @@
     | Learn anything, anywhere - from anyone. LIVE for $5 or less
   ul.thumbnails
     - each event in events
+      - if (event.date)      
+        script
+          $(function() {
+            $('#date#{event._id}').text($.format.date((new Date(#{event.date.valueOf()})), 'dd-MMM-yyyy hh:mm a'));
+          });
       li.span3
         - if (everyauth.loggedIn)
           - if (event.host.equals(user._id))
@@ -11,7 +16,7 @@
               img(src='/event/#{event._id}/image', alt='', width='260')
               p #{event.name}
               h5 #{event.description}
-              h5 #{event.date} , #{event.time}
+              h5(id='date#{event._id}') No date and time!
               h5 #{event.attendees.length} people attending
 
               -if (everyauth.loggedIn)
@@ -21,7 +26,7 @@
               img(src='/event/#{event._id}/image', alt='', width='260')
               p #{event.name}
               h5 #{event.description}
-              h5 #{event.date} , #{event.time}
+              h5(id='date#{event._id}') No date and time!
               h5 #{event.attendees.length} people attending
 
               -if (everyauth.loggedIn)
@@ -32,7 +37,7 @@
             img(src='/event/#{event._id}/image', alt='', width='260')
             p #{event.name}
             h5 #{event.description}
-            h5 #{event.date} , #{event.time}
+            h5(id='date#{event._id}') No date and time!
             h5 #{event.attendees.length} people attending
 
             -if (everyauth.loggedIn)

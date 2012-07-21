@@ -16,6 +16,8 @@ html(lang='en')
       padding-bottom: 40px;
       }
     link(href='/css/bootstrap-responsive.min.css', rel='stylesheet')
+    link(href='/css/datepicker.css', rel='stylesheet')
+    link(href='/css/timepicker.css', rel='stylesheet')
     link(href='/css/local.css', rel='stylesheet')
 
     //if lt IE 9
@@ -26,6 +28,12 @@ html(lang='en')
     link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/img/apple-touch-icon-114-precomposed.png')
     link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/img/apple-touch-icon-72-precomposed.png')
     link(rel='apple-touch-icon-precomposed', href='/img/apple-touch-icon-57-precomposed.png')
+
+    script(src='/js/jquery.min.js')
+    script(src='/js/bootstrap.min.js')
+    script(src='/js/jquery.dateFormat-1.0.js')
+    script(src='/js/bootstrap-datepicker-plus-month-names.js')
+    script(src='/js/bootstrap-timepicker.js')
   body
     .navbar.navbar-fixed-top
       .navbar-inner
@@ -47,6 +55,3 @@ html(lang='en')
                   a(href='/auth/google') Login with Google
                   
     .container!= body
-
-    script(src='/js/jquery.min.js')
-    script(src='/js/bootstrap.min.js')

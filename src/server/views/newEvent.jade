@@ -1,21 +1,67 @@
+script(src='/js/detect_timezone.js')
+script(type='text/javascript')
+  $(function() {
+    var currentDate = new Date();
+
+    function updateUnixTimeField() {
+      $('#unixTime').attr('value', (new Date($('#date').attr('value') + ' ' + $('#time').attr('value'))).valueOf());
+    }
+
+    // set up date picker
+    var date = $.format.date(currentDate, 'dd-MMM-yyyy');
+    $('#eventDate').attr('data-date', date);
+    $('#date').attr('value', date);
+    $('#eventDate').datepicker().on('changeDate', function(ev) {
+      $('#eventDate').datepicker('hide');
+      updateUnixTimeField();
+    });
+  
+    // set up time picker
+    $('#time').timepicker({
+      template: 'dropdown',
+      showInput: false,
+      disableFocus: true
+    }).change(function(ev) {
+      updateUnixTimeField();
+    });
+    
+    // initialise the hidden utcTime field
+    updateUnixTimeField();
+  });
 .hero-unit
-  h1 Want to organise a Q&A event?
-  p
-    form(id='event', action='/addEvent', method='post', enctype='multipart/form-data')
-      fieldset(data-role='controlgroup')
-        label(for='name') Name
-        input(id='name',name='name',type='text',value='',placeholder='Event Name')
-      fieldset(data-role='controlgroup')
-        label(for='image') Image
-        input(id='image',name='image',type='file',value='')
-      fieldset(data-role='controlgroup')
-        label(for='description') Description
-        textarea(id='description',name='description',placeholder='Event Description')
-      fieldset(data-role='controlgroup')
-        label(for='date') Date
-        input(id='date',name='date',type='text',value='',placeholder='DD/MM/YYYY')
-      fieldset(data-role='controlgroup')
-        label(for='time') Time
-        input(id='time',name='date',type='text',value='',placeholder='hh:mm')
-  p
-    a.btn(href='', onclick='document.forms["event"].submit(); return false;').btn-primary.btn-large Register
+  h1 Want to host a hangout?
+  form.well.form-horizontal(id='event', action='/addEvent', method='post', enctype='multipart/form-data')
+    input(type='hidden', id='unixTime', name='unixTime', value='0')
+    fieldset
+      .control-group
+        label.control-label(for='name') Name
+        .controls
+          input(id='name', name='name',type='text',value='',placeholder='Event Name')
+          p.help-block Choose a name for your event
+      .control-group
+        label.control-label(for='image') Image
+        .controls
+          input(id='image', name='image',type='file',value='')
+          p.help-block Upload an image
+      .control-group
+        label.control-label(for='description') Description
+        .controls
+          textarea(id='description', name='description',placeholder='Event Description')
+          p.help-block What is your event about?
+      .control-group
+        label.control-label(for='date') Date
+        .controls
+          .input-append.date(id='eventDate', data-date='01-Jan-1970', data-date-format='dd-mmm-yyyy') 
+            input.span2(id='date', name='date', size='16', type='text', value='01-01-1970', readonly)
+            span.add-on
+              i.icon-th
+      .control-group
+        label.control-label(for='time') Time
+        .controls
+          .input-append.bootstrap-timepicker-component 
+            input.timepicker.input-small(id='time', name='time', type='text', readonly)
+            span.add-on
+              i.icon-th
+      .control-group
+        .controls
+          button.btn(type='submit') Register

@@ -64,8 +64,7 @@ exports.addEvent = function(req, res) {
   var eventData = {
     name: req.body.name,
     description: req.body.description,
-    date: req.body.date,
-    time: req.body.time
+    date: req.body.unixTime,
   };
   if (req.files.image.size > 0) {
     eventData.image = {
@@ -305,7 +304,7 @@ exports.startEvent = function(req, res) {
 };
 
 exports.resetEvent = function(req, res) {
-  if (config.isSuperUser(req.user.id)) {
+  if (config.isSuperUser(req.user)) {
     Event.findOne({
       _id: req.params.id
     }, function(error, event) {
@@ -330,5 +329,22 @@ exports.resetEvent = function(req, res) {
     // TODO: send unauthorised users back to the event page?
     console.log((new Error('Someone not authorised tried to reset an event!')));
     res.redirect('/event/' + req.params.id);
+  }
+};
+
+exports.resetEvents = function(req, res) {
+  if (config.isSuperUser(req.user)) {
+    Event.remove({}, function(error) {
+      if (error) {
+        // TODO: try again?
+        console.log((new Error('Failed to remove the events')));
+        console.log(error);
+      }
+      res.redirect('/');  
+    });
+  } else {
+    // TODO: send unauthorised users back to the home page?
+    console.log((new Error('Someone not authorised tried to reset the events!')));
+    res.redirect('/');
   }
 };

@@ -53,8 +53,7 @@ describe('Event', function() {
                         user1.host({
                           name: 'test event 1',
                           description: 'test event description',
-                          date: 'date',
-                          time: 'time'
+                          date: 1342818000
                         }, function(err, event) {
                           if (err) {
                             done(err);
@@ -63,8 +62,7 @@ describe('Event', function() {
                             user1.host({
                               name: 'test event 2',
                               description: 'test event description',
-                              date: 'date',
-                              time: 'time'
+                              date: 1342818000
                             }, function(err, event) {
                               if (err) {
                                 done(err);
@@ -73,8 +71,7 @@ describe('Event', function() {
                                 user3.host({
                                   name: 'test event 3',
                                   description: 'test event description',
-                                  date: 'date',
-                                  time: 'time'
+                                  date: 1342818000
                                 }, function(err, event) {
                                   if (err) {
                                     done(err);
