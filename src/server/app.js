@@ -59,6 +59,7 @@ app.get('/hangoutxml', hangoutRoutes.hangoutxml);
 app.get('/resetEvent/:id', eventRoutes.resetEvent);
 app.get('/resetEvents', eventRoutes.resetEvents);
 app.get('/resetDatabase', homeRoutes.resetDatabase);
+app.get('/myEvents', userRoutes.myEvents);
 
 mongooseAuth.helpExpress(app);
 

@@ -46,8 +46,10 @@ html(lang='en')
           .nav-collapse
             ul.nav
               - if (everyauth.loggedIn)
-                li.active
+                li
                   a(href='/newEvent') New Event
+                li
+                  a(href='/myEvents') My Events
                 li
                   a(href='/logout') Log out #{everyauth.google.user.name}
               - else

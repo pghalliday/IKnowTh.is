@@ -3,18 +3,31 @@ var Event = require('../models/event.js'),
     config = require('../config.js').properties;
 
 exports.home = function(req, res) {
-  Event.find(function(error, events) {
+  var now = Date.now();
+  Event.where('date').gte(now).sort('date', 1).exec(function(error, upcomingEvents) {
     if (error) {
       // TODO: render a standard error?
-      console.log(new Error('Failed to find events'));
+      console.log(new Error('Failed to find upcoming events'));
       console.log(error);
       res.render('error', {
         title: config.title
       });
     } else {
-      res.render('home', {
-        title: config.title,
-        events: events
+      Event.where('date').lt(now).sort('date', -1).exec(function(error, pastEvents) {
+        if (error) {
+          // TODO: render a standard error?
+          console.log(new Error('Failed to find upcoming events'));
+          console.log(error);
+          res.render('error', {
+            title: config.title
+          });
+        } else {
+          res.render('home', {
+            title: config.title,
+            upcomingEvents: upcomingEvents,
+            pastEvents: pastEvents
+          });
+        }
       });
     }
   });
