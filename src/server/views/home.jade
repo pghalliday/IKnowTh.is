@@ -13,35 +13,31 @@
         - if (everyauth.loggedIn)
           - if (event.host.equals(user._id))
             .thumbnail.event-list-thumbnail-host
-              img(src='/event/#{event._id}/image', alt='', width='260')
-              p #{event.name}
+              a(href='/event/#{event._id}')
+                img(src='/event/#{event._id}/image', alt='', width='260')
+              p
+                a(href='/event/#{event._id}') #{event.name}
               h5 #{event.description}
               h5(id='date#{event._id}') No date and time!
               h5 #{event.attendees.length} people attending
-
-              -if (everyauth.loggedIn)
-                a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
           - else
             .thumbnail.event-list-thumbnail
-              img(src='/event/#{event._id}/image', alt='', width='260')
-              p #{event.name}
+              a(href='/event/#{event._id}')
+                img(src='/event/#{event._id}/image', alt='', width='260')
+              p
+                a(href='/event/#{event._id}') #{event.name}
               h5 #{event.description}
               h5(id='date#{event._id}') No date and time!
               h5 #{event.attendees.length} people attending
-
-              -if (everyauth.loggedIn)
-                a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
-
         - else
           .thumbnail.event-list-thumbnail
-            img(src='/event/#{event._id}/image', alt='', width='260')
-            p #{event.name}
+            a(href='/event/#{event._id}')
+              img(src='/event/#{event._id}/image', alt='', width='260')
+            p
+              a(href='/event/#{event._id}') #{event.name}
             h5 #{event.description}
             h5(id='date#{event._id}') No date and time!
             h5 #{event.attendees.length} people attending
-
-            -if (everyauth.loggedIn)
-              a.btn(href='/event/#{event._id}').btn-primary.btn-large Details
         
       
       //TODO: clean up those jade thumbnail blocks, no copy-pasting code!

@@ -5,12 +5,26 @@ var mongoose = require('mongoose'),
 var AttendeeSchema = new Schema({
   userId: {type: Schema.ObjectId, ref: 'User'},
   paypalToken: String,
-  confirmed: Boolean
+  confirmed: Boolean,
+  dateAdded: {type: Date, default: Date.now}
 });
 
+/*
+TODO: I will use pending payments to track whether
+people leave the site during payment authorisation.
+Because this is a strong possibility I don't want to
+reserve their place in an event until we have some kind
+of payment confirmation (Not sure about this though, we
+could still reserve the spot). There needs to be a
+background task that cleans out this records when they
+get old as they will likely get orphaned (the advantage
+of not reserving the spot is that this clean up can be quite
+lazy)
+*/
 var PendingPaymentsSchema = new Schema({
   userId: {type: Schema.ObjectId, ref: 'User'},
   paypalToken: String,
+  timestamp: {type: Date, default: Date.now}
 });
 
 var EventSchema = new Schema({
@@ -22,6 +36,7 @@ var EventSchema = new Schema({
   },
   description: String,
   date: Date,
+  dateAdded: {type: Date, default: Date.now},
   attendees: [AttendeeSchema],
   pendingPayments: [PendingPaymentsSchema],
   hangout: String

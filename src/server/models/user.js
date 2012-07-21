@@ -5,7 +5,9 @@ var mongoose = require('mongoose'),
     Event = require('./event.js'),
     User;
 
-var UserSchema = new Schema({});
+var UserSchema = new Schema({
+  dateAdded: {type: Date, default: Date.now}
+});
 
 UserSchema.plugin(mongooseAuth, {
   everymodule: {

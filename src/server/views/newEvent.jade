@@ -1,7 +1,7 @@
 script(src='/js/detect_timezone.js')
 script(type='text/javascript')
   $(function() {
-    var currentDate = new Date();
+    var currentDate = Date.now();
 
     function updateUnixTimeField() {
       $('#unixTime').attr('value', (new Date($('#date').attr('value') + ' ' + $('#time').attr('value'))).valueOf());
