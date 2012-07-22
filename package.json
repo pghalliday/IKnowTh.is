@@ -10,6 +10,7 @@
       "express": "2.5.11"
     , "jade": ">= 0.26.3"
     , "mongoose": ">= 2.7.1"
+    , "mongoose-auth": ">= 0.0.12"
     , "everyauth": ">= 0.2.32"
     , "paynode": ">= 0.3.6"
     , "grunt": ">= 0.3.11"
