@@ -16,28 +16,37 @@ p
     p
       a(href='#{googleHangoutUrl}?authuser=0&gid=#{googleProjectId}&gd=#{event._id}', target='new')
         img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Start your Hangout')
-    p
-      a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
+    - if (!event.complete)
+      p
+        a.btn(href='/completeEvent/#{event._id}').btn-primary.btn-large Complete
+    - if (event.attendees.length == 0)
+      p
+        a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
   - else
     - var attendee = event.getAttendee(user);
     - if (attendee != null)
-      - if (attendee.confirmed)
-        - if (event.hangout)
-          p
-            a(href='#{event.hangout}', target='new')
-              img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Join the Hangout')
-        - else
-          p
-            | Your payment is confirmed (Thank you!), now waiting for hangout to start
+      - if (event.hangout)
+        p
+          a(href='#{event.hangout}', target='new')
+            img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Join the Hangout')
       - else
         p
-          | Your spot has been reserved, now waiting for payment confirmation
+          | Your payment is confirmed (Thank you!), now waiting for hangout to start
+      - var pendingReceipt = event.getPendingReceipt(user);
+      - if (pendingReceipt != null)
+        - if (pendingReceipt.disputed)
+          | Receipt of event has been disputed on #{pendingReceipt.disputed.toString()}
+        - else
+          p
+            a.btn(href='/confirmReceipt/#{event._id}').btn-primary.btn-large Confirm Receipt
+          p
+            a.btn(href='/disputeReceipt/#{event._id}').btn-primary.btn-large Dispute Receipt
     - else
       - if (event.attendees.length < maximumAttendees)
         p
           | Reserve Your Spot for 5 Euros!
         p
-          a(href='/attendEvent/#{event._id}/#{user._id}')
+          a(href='/attendEvent/#{event._id}')
             img(src='#{paypalUrl}/en_US/i/btn/btn_xpressCheckout.gif', align='left', style='margin-right:7px;')
       - else
         p

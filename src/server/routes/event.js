@@ -1,14 +1,6 @@
 var Event = require('../models/event.js'),
     fs = require('fs'),
-    payflowpro = require('paynode').use('payflowpro'),
     config = require('../config.js').properties;
-
-var paypalClient = payflowpro.createClient({
-  level: config.paypalLevel,
-  user: config.paypalUser,
-  password: config.paypalPassword,
-  signature: config.paypalSignature
-});
 
 exports.event = function(req, res) {
   Event.findOne({
@@ -102,68 +94,24 @@ exports.deleteEvent = function(req, res) {
 
 exports.attendEvent = function(req, res) {
   Event.findOne({
-    _id: req.params.eventId
+    _id: req.params.id
   }, function(error, event) {
     if (error) {
       // TODO: try again?
       console.log((new Error('Failed to find event')));
       console.log(error);
-      res.redirect('/event/' + req.params.eventId);
+      res.redirect('/event/' + req.params.id);
     } else {
-      req.user.attend(event, function(error, attendee) {
+      req.user.pendPayment(event, function(error, pendingPayment) {
         if (error) {
           // TODO: try again?
-          console.log((new Error('Failed to add attendee to event')));
+          console.log((new Error('Failed to pend the payment')));
           console.log(error);
-          res.redirect('/event/' + req.params.eventId);
+          res.redirect('/event/' + req.params.id);
         } else {
-          // start the paypal transaction
-          paypalClient.setExpressCheckout({
-            returnurl: config.baseUrl + '/attendEventContinue/' + req.params.eventId + '/' + req.params.userId,
-            cancelurl: config.baseUrl + '/attendEventCancel/' + req.params.eventId + '/' + req.params.userId,
-            paymentrequest: [{
-              amt: '5.00',
-              currencyCode: 'EUR',
-              paymentAction: 'Sale'
-            }]
-          }).on('success', function(response) {
-            // associate the payment token with the reserved spot
-            attendee.paypalToken = response.token;
-            event.save(function(error) {
-              if (error) {
-                // TODO: try again?
-                console.log((new Error('Failed to save paypal token on attendee')));
-                console.log(error);
-                // free the reserved spot
-                attendee.remove();
-                event.save(function(error) {
-                  if (error) {
-                    console.log((new Error('Failed to remove attendee from event after failing to save paypal token')));
-                    console.log(error);
-                  }
-                  // TODO: whatever happens send the user back to the event page?
-                  res.redirect('/event/' + req.params.eventId);
-                });
-              } else {
-                // request payment authorization
-                res.redirect(config.paypalUrl + '/cgi-bin/webscr?cmd=_express-checkout&token=' + response.token);
-              }
-            });
-          }).on('failure', function(response) {
-            console.log((new Error('Failed to set express checkout information')));
-            console.log(response.errors);
-            // free the reserved spot
-            attendee.remove();
-            event.save(function(error) {
-              if (error) {
-                console.log((new Error('Failed to remove attendee from event after set express checkout information failure')));
-                console.log(error);
-              }
-              // TODO: whatever happens send the user back to the event page?
-              res.redirect('/event/' + req.params.eventId);
-            });
-          });
-        }      
+          // request payment authorization
+          res.redirect(config.paypalUrl + '/cgi-bin/webscr?cmd=_express-checkout&token=' + pendingPayment.paypalSetExpressCheckoutResponse.token);
+        }
       });
     }
   });
@@ -171,100 +119,41 @@ exports.attendEvent = function(req, res) {
 
 exports.attendEventContinue = function(req, res) {
   Event.findOne({
-    _id: req.params.eventId
+    _id: req.params.id
   }, function(error, event) {
     if (error) {
       // TODO: try again?
       console.log((new Error('Failed to find event')));
       console.log(error);
-      res.redirect('/event/' + req.params.eventId);
+      res.redirect('/event/' + req.params.id);
     } else {
-      var attendee = event.getAttendee(req.user);
-      if (attendee !== null) {
-        if (attendee.paypalToken === req.query.token) {
-          paypalClient.doExpressCheckoutPayment({
-            token: req.query.token,
-            payerid: req.query.PayerID,
-            paymentrequest: [{
-              amt: '5.00',
-              currencyCode: 'EUR',
-              paymentAction: 'Sale'
-            }]
-          }).on('success', function(response) {
-            // mark the attendee as confirmed
-            attendee.confirmed = true;
-            event.save(function(error) {
-              if (error) {
-                // TODO: try again?
-                console.log((new Error('Failed to mark attendee as confimred!!! This could be a problem as they have paid now!!!!')));
-                console.log(error);
-              }
-              // TODO: send the user back to the event page whatever?
-              res.redirect('/event/' + req.params.eventId);
-            });
-          }).on('failure', function(response) {
-            console.log((new Error('Failed to set doExpressCheckoutPayment')));
-            console.log(response.errors);
-            // free the reserved spot
-            attendee.remove();
-            event.save(function(error) {
-              if (error) {
-                console.log((new Error('Failed to remove attendee from event after final payment failure')));
-                console.log(error);
-              }
-              // TODO: whatever happens send the user back to the event page?
-              res.redirect('/event/' + req.params.eventId);
-            });
-          });
+      req.user.confirmPayment(event, req.query, function(error, attendee) {
+        if (error) {
+          console.log((new Error('Failed to confirm the payment')));
+          console.log(error);
+          // TODO: add error message to response!
+          res.redirect('/event/' + req.params.id);
         } else {
-          // TODO: try again?
-          console.log((new Error('Paypal token did not match assuming failure and removing attendee')));
-          attendee.remove();
-          event.save(function(error) {
-            if (error) {
-              console.log((new Error('Failed to remove attendee from event after paypal token mismatch')));
-              console.log(error);
-            }
-            // TODO: whatever happens send the user back to the event page?
-            res.redirect('/event/' + req.params.eventId);
-          });
+          res.redirect('/event/' + req.params.id);
         }
-      } else {
-        // TODO: try again?
-        console.log((new Error('Failed to find attendee')));
-        res.redirect('/event/' + req.params.eventId);
-      }
+      });
     }
   });
 };
 
 exports.attendEventCancel = function(req, res) {
   Event.findOne({
-    _id: req.params.eventId
+    _id: req.params.id
   }, function(error, event) {
     if (error) {
       // TODO: try again?
       console.log((new Error('Failed to find event')));
       console.log(error);
-      res.redirect('/event/' + req.params.eventId);
+      res.redirect('/event/' + req.params.id);
     } else {
-      var attendee = event.getAttendee(req.user);
-      if (attendee !== null) {
-        // free the reserved spot				
-        attendee.remove();
-        event.save(function(error) {
-          if (error) {
-            console.log((new Error('Failed to remove attendee from event after payment cancellation')));
-            console.log(error);
-          }
-          // TODO: whatever happens send the user back to the event page?
-          res.redirect('/event/' + req.params.eventId);
-        });
-      } else {
-        // TODO: try again?
-        console.log((new Error('Failed to find attendee')));
-        res.redirect('/event/' + req.params.eventId);
-      }
+      req.user.cancelPayment(event, req.query, function(error) {
+        res.redirect('/event/' + req.params.id);
+      });
     }
   });
 };
@@ -291,12 +180,84 @@ exports.startEvent = function(req, res) {
           res.json({
             success: false,
             msg: "Error: Failed to start event"
-          });          
+          });
         } else {
           res.json({
             success: true,
             msg: "Success: Event Started"
           });
+        }
+      });
+    }
+  });
+};
+
+exports.completeEvent = function(req, res) {
+  Event.findOne({
+    _id: req.params.id
+  }, function(error, event) {
+    if (error) {
+      // TODO: try again?
+      console.log((new Error('Failed to find event')));
+      console.log(error);
+      res.redirect('/event/' + req.params.id);
+    } else {
+      event.setComplete(function(error) {
+        if (error) {
+          // TODO: try again?
+          console.log((new Error('Failed to mark event complete')));
+          console.log(error);
+          res.redirect('/event/' + req.params.id);
+        } else {
+          res.redirect('/event/' + req.params.id);          
+        }
+      });
+    }
+  });
+};
+
+exports.confirmReceipt = function(req, res) {
+  Event.findOne({
+    _id: req.params.id
+  }, function(error, event) {
+    if (error) {
+      // TODO: try again?
+      console.log((new Error('Failed to find event')));
+      console.log(error);
+      res.redirect('/event/' + req.params.id);
+    } else {
+      event.confirmReceipt(req.user, function(error) {
+        if (error) {
+          // TODO: try again?
+          console.log((new Error('Failed to confirm receipt of event')));
+          console.log(error);
+          res.redirect('/event/' + req.params.id);
+        } else {
+          res.redirect('/event/' + req.params.id);          
+        }
+      });
+    }
+  });
+};
+
+exports.disputeReceipt = function(req, res) {
+  Event.findOne({
+    _id: req.params.id
+  }, function(error, event) {
+    if (error) {
+      // TODO: try again?
+      console.log((new Error('Failed to find event')));
+      console.log(error);
+      res.redirect('/event/' + req.params.id);
+    } else {
+      event.disputeReceipt(req.user, function(error) {
+        if (error) {
+          // TODO: try again?
+          console.log((new Error('Failed to dispute receipt of event')));
+          console.log(error);
+          res.redirect('/event/' + req.params.id);
+        } else {
+          res.redirect('/event/' + req.params.id);          
         }
       });
     }
@@ -340,7 +301,7 @@ exports.resetEvents = function(req, res) {
         console.log((new Error('Failed to remove the events')));
         console.log(error);
       }
-      res.redirect('/');  
+      res.redirect('/');
     });
   } else {
     // TODO: send unauthorised users back to the home page?

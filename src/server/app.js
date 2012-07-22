@@ -50,16 +50,21 @@ app.get('/event/:id/image', eventRoutes.eventImage);
 app.get('/newEvent', eventRoutes.newEvent);
 app.post('/addEvent', eventRoutes.addEvent);
 app.get('/deleteEvent/:id', eventRoutes.deleteEvent);
-app.get('/attendEvent/:eventId/:userId', eventRoutes.attendEvent);
-app.get('/attendEventContinue/:eventId/:userId', eventRoutes.attendEventContinue);
-app.get('/attendEventCancel/:eventId/:userId', eventRoutes.attendEventCancel);
+app.get('/attendEvent/:id', eventRoutes.attendEvent);
+app.get('/attendEventContinue/:id', eventRoutes.attendEventContinue);
+app.get('/attendEventCancel/:id', eventRoutes.attendEventCancel);
 app.post('/startEvent/:id', eventRoutes.startEvent);
+app.get('/completeEvent/:id', eventRoutes.completeEvent);
+app.get('/confirmReceipt/:id', eventRoutes.confirmReceipt);
+app.get('/disputeReceipt/:id', eventRoutes.disputeReceipt);
 app.get('/hangout', hangoutRoutes.hangout);
 app.get('/hangoutxml', hangoutRoutes.hangoutxml);
+app.get('/resetDatabase', homeRoutes.resetDatabase);
+app.get('/user', userRoutes.user);
+
+// super user routes
 app.get('/resetEvent/:id', eventRoutes.resetEvent);
 app.get('/resetEvents', eventRoutes.resetEvents);
-app.get('/resetDatabase', homeRoutes.resetDatabase);
-app.get('/myEvents', userRoutes.myEvents);
 
 mongooseAuth.helpExpress(app);
 

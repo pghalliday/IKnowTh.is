@@ -1,7 +1,7 @@
 var User = require('../models/user.js'),
     config = require('../config.js').properties;
 
-exports.myEvents = function(req, res) {
+exports.user = function(req, res) {
   if (!req.user) {
     // TODO: render a standard error?
     console.log(new Error('User is not logged in'));
@@ -18,7 +18,7 @@ exports.myEvents = function(req, res) {
           if (error) {
             console.log(new Error('Could not retrieve hosted events'));
             console.log(error);
-          } else {    
+          } else {
             res.render('user', {
               title: config.title,
               attendedEvents: attendedEvents,
