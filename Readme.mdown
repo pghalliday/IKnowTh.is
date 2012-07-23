@@ -2,26 +2,24 @@
 
 # Notes on config.js
 
-The secret configuration information needs to be present in a file in the root of the project called config.js.
-This file should have the following contents:
-
-	var payflowpro = require('paynode').use('payflowpro');
+The following configuration information needs to be present in the file ~/.iknowthis/config.js:
 
 	exports.properties = {
-	    title: '<The application title>'
-	  , superUsers: ['<Google user ID>', '<Google user ID>', etc]
-	  , isSuperUser: function(googleUserId) {return (this.superUsers.indexOf(googleUserId) != -1);}
-	  , baseUrl: '<The base URL for the instance>'
-	  , maximumAttendees: <Maximum number of attendees: probably 7 as there is a host and only 7 other spots available in google hangouts>
-	  , googleAppId: '<Google App ID for authentication calls>'
-	  , googleAppSecret: '<Google App secret for authentication calls>'
-	  , googleProjectId: '<Google project ID for hangout application>'
-	  , googleHangoutUrl: '<Hangout URL to use, ie. sandbox or live URL>'
-	  , paypalUrl: '<Paypal URL to use, ie. sandbox or live>'
-	  , paypalLevel: <paynode/payflowpro level, ie. sandbox or live>
-	  , paypalUser: '<Paypal API user>'
-	  , paypalPassword: '<Paypal API password>'
-	  , paypalSignature: '<Paypal API signature>'
+	  title: '<The application title>',
+	  superUsers: ['<Google user ID>', '<Google user ID>', etc],
+	  isSuperUser: function(googleUserId) {return (this.superUsers.indexOf(googleUserId) != -1);},
+	  baseUrl: '<The base URL for the instance (should include the port number if not 80)>',
+	  port: '<Optional: The port to use (defaults to 3000)>',
+	  maximumAttendees: <Maximum number of attendees: probably 7 as there is a host and only 7 other spots available in google hangouts>,
+	  googleAppId: '<Google App ID for authentication calls>',
+	  googleAppSecret: '<Google App secret for authentication calls>',
+	  googleProjectId: '<Google project ID for hangout application>',
+	  googleHangoutUrl: '<Hangout URL to use, ie. sandbox or live URL>',
+	  paypalUrl: '<Paypal URL to use, ie. sandbox or live>',
+	  paypalLevel: <'live' to specify a live paypal account, anything else will default to the sandbox>,
+	  paypalUser: '<Paypal API user>',
+	  paypalPassword: '<Paypal API password>',
+	  paypalSignature: '<Paypal API signature>'
 	};
 
 # Deployment to local development
@@ -30,7 +28,9 @@ This file should have the following contents:
 * use git to clone
 * go to command line at directory
 * run 'npm install'
-* run 'node app.js'
+** The mongoose-auth package will need to build the bcrypt stuff so you may need to install make and g++
+** This will not install on windows (so windows is currently unsupported)
+* run 'node src/server/app.js'
 
 # Deployment to Heroku
 * From command line:
