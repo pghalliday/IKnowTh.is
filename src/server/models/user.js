@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
     mongooseAuth = require('mongoose-auth'),
-    config = require(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties,
+    config = require(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties,
     Schema = mongoose.Schema,
     Event = require('./event.js'),
     payflowpro = require('paynode').use('payflowpro'),

@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    config = require(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties;
+    config = require(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties;
 
 exports.hangout = function(req, res) {
   res.render('hangout', {

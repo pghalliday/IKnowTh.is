@@ -1,5 +1,5 @@
 var mongoose = require('mongoose'),
-    config = require(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties,
+    config = require(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties,
     should = require('should'),
     Event = require('./event.js'),
     User = require('./user.js');
