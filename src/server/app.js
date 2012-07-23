@@ -13,7 +13,7 @@ var express = require('express'),
     fs = require('fs'),
     User = require('./models/user.js');
 
-var db = process.env.MONGOHQ_URL || 'mongodb://localhost/Hangout';
+var db = process.env.MONGOHQ_URL || config.databaseUrl || 'mongodb://localhost/IKnowTh.is';
 mongoose.connect(db);
 
 var app = module.exports = express.createServer();

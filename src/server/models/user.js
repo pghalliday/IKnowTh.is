@@ -80,8 +80,8 @@ UserSchema.plugin(mongooseAuth, {
   google: {
     everyauth: {
       myHostname: config.baseUrl,
-      appId: config.googleAppId,
-      appSecret: config.googleAppSecret,
+      appId: config.googleAuthAppId,
+      appSecret: config.googleAuthAppSecret,
       redirectPath: '/',
       scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
     }

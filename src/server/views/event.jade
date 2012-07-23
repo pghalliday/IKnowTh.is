@@ -14,7 +14,7 @@ p
 - if (everyauth.loggedIn)
   - if (event.host.equals(user._id))
     p
-      a(href='#{googleHangoutUrl}?authuser=0&gid=#{googleProjectId}&gd=#{event._id}', target='new')
+      a(href='#{googleHangoutUrl}?authuser=0&gid=#{googleHangoutProjectId}&gd=#{event._id}', target='new')
         img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Start your Hangout')
     - if (!event.complete)
       p
