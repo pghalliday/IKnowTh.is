@@ -31,10 +31,3 @@ The following configuration information needs to be present in the file ~/.iknow
 ** The mongoose-auth package will need to build the bcrypt stuff so you may need to install make and g++
 ** This will not install on windows (so windows is currently unsupported)
 * run 'node src/server/app.js'
-
-# Deployment to Heroku
-* From command line:
-* heroku login
-* heroku create   (or, if site already exists: git remote add heroku git@heroku.com:fivelive.git)
-* git push heroku master
-* heroku addons:add mongohq:free //start mongo
