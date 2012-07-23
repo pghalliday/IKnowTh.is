@@ -10,5 +10,5 @@ exports.hangout = function(req, res) {
 
 exports.hangoutxml = function(req, res) {
   res.contentType('application/xml; charset=UTF-8');
-  res.send(fs.readFileSync('hangout.xml', 'utf8').replace('IFRAMEURL', config.baseUrl + '/hangout'));
+  res.send(fs.readFileSync('src/server/hangout.xml', 'utf8').replace('IFRAMEURL', config.baseUrl + '/hangout'));
 };
