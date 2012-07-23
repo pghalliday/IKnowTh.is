@@ -1,5 +1,5 @@
 var mongoose = require('mongoose'),
-    config = require('../config.js').properties,
+    config = require(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties,
     Schema = mongoose.Schema;
 
 var AttendeeSchema = new Schema({

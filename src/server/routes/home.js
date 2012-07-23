@@ -1,6 +1,6 @@
 var Event = require('../models/event.js'),
     User = require('../models/user.js'),
-    config = require('../config.js').properties;
+    config = require(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties;
 
 exports.home = function(req, res) {
   var now = Date.now();

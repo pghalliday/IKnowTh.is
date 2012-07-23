@@ -1,13 +1,13 @@
 var mongoose = require('mongoose'),
     mongooseAuth = require('mongoose-auth'),
-    config = require('../config.js').properties,
+    config = require(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties,
     Schema = mongoose.Schema,
     Event = require('./event.js'),
     payflowpro = require('paynode').use('payflowpro'),
     User;
 
 var paypalClient = payflowpro.createClient({
-  level: config.paypalLevel,
+  level: (config.paypalLevel === 'live' ? payflowpro.levels.live : payflowpro.levels.sandbox),
   user: config.paypalUser,
   password: config.paypalPassword,
   signature: config.paypalSignature

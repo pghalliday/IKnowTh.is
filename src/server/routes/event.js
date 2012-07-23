@@ -1,6 +1,6 @@
 var Event = require('../models/event.js'),
     fs = require('fs'),
-    config = require('../config.js').properties;
+    config = require(process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties;
 
 exports.event = function(req, res) {
   Event.findOne({
