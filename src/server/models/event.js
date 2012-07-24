@@ -89,6 +89,7 @@ var EventSchema = new Schema({
 });
 
 EventSchema.method('failPayment', function(user, pendingPayment, reason, fn) {
+  var event = this;
   user.failedPayments.push({
     eventId: this._id,
     pendingPaymentId: pendingPayment._id,
@@ -100,7 +101,7 @@ EventSchema.method('failPayment', function(user, pendingPayment, reason, fn) {
       fn(new Error('Failed to save failed payment on user'));
     } else {
       pendingPayment.old = true;
-      this.save(fn);
+      event.save(fn);
     }
   });
 });
