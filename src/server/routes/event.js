@@ -18,7 +18,7 @@ exports.event = function(req, res) {
         title: config.title,
         maximumAttendees: config.maximumAttendees,
         googleHangoutUrl: config.googleHangoutUrl,
-        googleProjectId: config.googleHangoutProjectId,
+        googleHangoutProjectId: config.googleHangoutProjectId,
         paypalUrl: config.paypalUrl,
         event: event
       });
