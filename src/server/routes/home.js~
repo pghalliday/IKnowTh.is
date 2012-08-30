@@ -4,7 +4,7 @@ var Event = require('../models/event.js'),
 
 exports.home = function(req, res) {
   var now = Date.now();
-  Event.where('date').gte(now).sort('date').exec(function(error, upcomingEvents) {
+  Event.where('date').gte(now).sort('date', 1).exec(function(error, upcomingEvents) {
     if (error) {
       // TODO: render a standard error?
       console.log(new Error('Failed to find upcoming events'));
@@ -13,7 +13,7 @@ exports.home = function(req, res) {
         title: config.title
       });
     } else {
-      Event.where('date').lt(now).sort('-date').exec(function(error, pastEvents) {
+      Event.where('date').lt(now).sort('date', -1).exec(function(error, pastEvents) {
         if (error) {
           // TODO: render a standard error?
           console.log(new Error('Failed to find upcoming events'));
