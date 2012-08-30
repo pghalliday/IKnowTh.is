@@ -9,6 +9,17 @@ exports.hangout = function(req, res) {
 };
 
 exports.hangoutxml = function(req, res) {
-  res.contentType('application/xml; charset=UTF-8');
-  res.send(fs.readFileSync('src/server/hangout.xml', 'utf8').replace('IFRAMEURL', config.baseUrl + '/hangout'));
+  fs.readFile('src/server/hangout.xml', 'utf8', function(error, data) {
+    if (error) {
+      // TODO: render a standard error?
+      console.log(new Error('Failed to read hangout.xml'));
+      console.log(error);
+      res.render('error', {
+        title: config.title
+      });      
+    } else {
+      res.contentType('application/xml; charset=UTF-8');
+      res.send(data.replace('IFRAMEURL', config.baseUrl + '/hangout'));
+    }
+  });
 };
