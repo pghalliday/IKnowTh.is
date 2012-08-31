@@ -1,5 +1,5 @@
 describe('Application', function() {
-  var Application = require('./application.js');
+  var Application = require('./Application.js');
   
   var application;
   
