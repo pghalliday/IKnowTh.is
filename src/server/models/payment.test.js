@@ -78,13 +78,50 @@ describe('Payment', function() {
 
   describe('#processPayment()', function() {
     it('should add a new payment record', function(done) {
-      done();
+      Payment.processPayment(event, attendee, {
+        description: 'payment details'
+      }, function(error, payment) {
+        should.not.exist(error, 'should not get an error');
+        should.exist(payment, 'should have a payment object');
+        should.exist(payment.dateAdded, 'payment object should have a date added field');
+        payment.attendee.should.eql(attendee._id, 'payment object should have the correct attendee reference');
+        payment.event.should.eql(event._id, 'payment object should have the correct event reference');
+        should.exist(payment.details, 'payment object should have payment details');
+        should.exist(payment.details.description, 'payment details should have description');
+        payment.details.description.should.eql('payment details', 'payment details description should be correct');
+        done();
+      });
     });
+    
     it('should error if the user has already paid for the event', function(done) {
-      done();
+      Payment.processPayment(event, attendee, {
+        description: 'first payment details'
+      }, function(error, payment) {
+        Payment.processPayment(event, attendee, {
+          description: 'second payment details'
+        }, function(error, payment) {
+          should.exist(error, 'error should exist');
+          error.should.be.an.instanceOf(Error, 'error should be of type Error');
+          error.toString().should.eql((new Error('Attendee cannot pay for an event twice')).toString(), 'Error should contain the correct message');
+          should.exist(payment, 'should have a payment object');
+          should.exist(payment.details, 'payment object should have payment details');
+          should.exist(payment.details.description, 'payment details should have description');
+          payment.details.description.should.eql('first payment details', 'payment details description should be from the first payment processed');
+          done();
+        });
+      });
     });
+    
     it('should error if the host tries to pay for their own event', function(done) {
-      done();
+      Payment.processPayment(event, host, {
+        description: 'payment details'
+      }, function(error, payment) {
+        should.exist(error, 'error should exist');
+        error.should.be.an.instanceOf(Error, 'error should be of type Error');
+        error.toString().should.eql((new Error('Host cannot pay to attend their own event')).toString(), 'Error should contain the correct message');
+        should.not.exist(payment, 'payment should not exist');
+        done();
+      });
     });
   });
 });
