@@ -5,37 +5,59 @@ describe('Payment', function() {
       Event = require('./event.js'),
       Payment = require('./payment.js');
 
-  var host, attendee;
+  var host, attendee, event;
 
   before(function(done) {
     // connect to a test database
-    mongoose.connect('mongodb://localhost/UnitTest_Hangout_Payment', done);
-    
-    // remove all users
-    User.remove({}, function(error) {
+    mongoose.connect('mongodb://localhost/UnitTest_Hangout_Payment', function(error) {
       if (error) {
         done(error);
-      } else {
-        // remove all events
-        Event.remove({}, function(error) {
+      } else {    
+        // remove all users
+        User.remove({}, function(error) {
           if (error) {
             done(error);
           } else {
-            // add a host
-            host = new User({
-              id: 'host',
-              name: 'host user'
-            });
-            host.save(function(error) {
+            // remove all events
+            Event.remove({}, function(error) {
               if (error) {
                 done(error);
               } else {
-                // add an attendee
-                attendee = new User({
-                  id: 'attendee',
-                  name: 'attendee user'
+                // add a host
+                host = new User({
+                  id: 'host',
+                  name: 'host user'
                 });
-                attendee.save(done);
+                host.save(function(error) {
+                  if (error) {
+                    done(error);
+                  } else {
+                    // add an attendee
+                    attendee = new User({
+                      id: 'attendee',
+                      name: 'attendee user'
+                    });
+                    attendee.save(function(error) {
+                      if (error) {
+                        done(error);
+                      } else {
+                        // add an event
+                        host.host({
+                          name: 'event',
+                          description: 'description',
+                          date: 1342818000   
+                        }, function(error, newEvent) {
+                          if (error) {
+                            done(error);
+                          } else {
+                            event = newEvent;
+                            done();
+                          }
+                        });
+                      }
+                    });
+                  }
+                });
               }
             });
           }
