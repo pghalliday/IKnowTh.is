@@ -78,7 +78,7 @@ describe('Payment', function() {
 
   describe('#processPayment()', function() {
     it('should add a new payment record', function(done) {
-      Payment.processPayment(event, attendee, {
+      Payment.process(event, attendee, {
         description: 'payment details'
       }, function(error, payment) {
         should.not.exist(error, 'should not get an error');
@@ -94,10 +94,10 @@ describe('Payment', function() {
     });
     
     it('should error if the user has already paid for the event', function(done) {
-      Payment.processPayment(event, attendee, {
+      Payment.process(event, attendee, {
         description: 'first payment details'
       }, function(error, payment) {
-        Payment.processPayment(event, attendee, {
+        Payment.process(event, attendee, {
           description: 'second payment details'
         }, function(error, payment) {
           should.exist(error, 'error should exist');
@@ -113,7 +113,7 @@ describe('Payment', function() {
     });
     
     it('should error if the host tries to pay for their own event', function(done) {
-      Payment.processPayment(event, host, {
+      Payment.process(event, host, {
         description: 'payment details'
       }, function(error, payment) {
         should.exist(error, 'error should exist');

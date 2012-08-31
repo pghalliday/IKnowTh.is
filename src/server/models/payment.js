@@ -19,7 +19,7 @@ var PaymentSchema = new Schema({
   details: {}
 });
 
-PaymentSchema.statics.processPayment = function(event, attendee, details, callback) {
+PaymentSchema.statics.process = function(event, attendee, details, callback) {
   // check that the attendee is not the host
   if (attendee._id === event.host) {
     var error = new Error('Host cannot pay to attend their own event');
