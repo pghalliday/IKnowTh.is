@@ -1,5 +1,5 @@
 describe('GoogleWalletPostback', function() {
-  var GoogleWalletPostback = require('./googleWalletPostback.js'); 
+  var GoogleWalletPostback = require('./GoogleWalletPostback.js'); 
 
   // define a mock JWT object
   var mockJwt = {
