@@ -4,6 +4,7 @@ module.exports = function() {
    */
 
   var express = require('express'),
+      http = require('http'),
       homeRoutes = require('./routes/home.js'),
       userRoutes = require('./routes/user.js'),
       eventRoutes = require('./routes/event.js'),
@@ -17,7 +18,8 @@ module.exports = function() {
   var db = process.env.MONGOHQ_URL || config.databaseUrl || 'mongodb://localhost/IKnowThis';
   mongoose.connect(db);
 
-  var app = module.exports = express.createServer();
+  var app = express();
+  var server = http.createServer(app);
 
   // Configuration
   app.configure(function() {
@@ -72,14 +74,18 @@ module.exports = function() {
   var port = process.env.PORT || config.port || 3000;
   
   this.start = function(callback) {
-    app.listen(port, function() {
-      console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-      callback();
+    mongoose.connect(db, function() {
+      server.listen(port, function() {
+        console.log("Express server listening on port %d in %s mode", server.address().port, app.settings.env);
+        callback();
+      });
     });
   };
   
   this.stop = function(callback) {
-    app.close(callback);
+    server.close(function () {
+      mongoose.disconnect(callback);
+    });
   };
 };
 

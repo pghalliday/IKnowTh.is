@@ -11,4 +11,10 @@ describe('Application', function() {
   after(function(done) {
     application.stop(done);
   });
+  
+  describe('GET something', function() {
+    it('should respond to get request', function(done) {
+      done();
+    });
+  });
 });
