@@ -1,20 +1,10 @@
 describe('GoogleWalletMock', function() {
-  var GoogleWalletMock = require('./GoogleWalletMock.js');
+  var app = require('./GoogleWalletMock.js'),
+      request = require('supertest');
   
-  var googleWalletMock;
-  
-  before(function(done) {
-    googleWalletMock = new GoogleWalletMock(8000);
-    googleWalletMock.start(done);
-  });
-  
-  after(function(done) {
-    googleWalletMock.stop(done);
-  });
-  
-  describe('GET /purchase', function() {
-    it('should respond to get request on route /purchase', function(done) {
-      done();
+  describe('GET /', function() {
+    it('should respond with 200 OK to get request on route /', function(done) {
+      request(app).get('/').expect(200, done);
     });
   });
 });

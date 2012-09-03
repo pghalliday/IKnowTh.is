@@ -41,7 +41,7 @@ module.exports = function(grunt) {
       });
     } catch (e) {
       console.log('Mocha exploded!');
-      console.log(e);
+      console.log(e.stack);
       done(false);
     }
   });
