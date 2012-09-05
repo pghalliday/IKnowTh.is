@@ -1,5 +1,6 @@
 describe('Server', function() {
   var Server = require('./Server'),
+      should = require('should'),
       request = require('supertest');
 
   var requestBody = {body: 'my request'};
