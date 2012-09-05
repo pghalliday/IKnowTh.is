@@ -1,17 +1,21 @@
 module.exports = function(key, encoder) {
   this.encode = function(payload, callback) {
+    var error, token;
     try {
-      callback(null, encoder.encode(payload, key));
+      token = encoder.encode(payload, key);
     } catch(err) {
-      callback(err, null);
+      error = err;
     }
+    callback(error, token);
   };
   
   this.decode = function(token, callback) {
+    var error, payload;
     try {
-      callback(null, encoder.decode(token, key));
+      payload = encoder.decode(token, key);
     } catch(err) {
-      callback(err, null);
+      error = err;
     }
+    callback(error, payload);
   };
 };

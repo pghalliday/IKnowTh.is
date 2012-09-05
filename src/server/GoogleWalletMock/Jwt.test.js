@@ -30,6 +30,23 @@ describe('Jwt', function() {
         done();
       });
     });
+    
+    it('should not catch errors thrown from callback', function(done) {
+      var jwt = new Jwt('secret', encoder);
+      var error;
+      try {
+        jwt.encode({
+          data: 'some data'
+        }, function(err, encoded) {
+          throw new Error('this is a test');
+        });
+      } catch(err) {
+        error = err;
+      }
+      should.exist(error);
+      error.toString().should.eql((new Error('this is a test')).toString());
+      done();
+    });
   });
   
   describe('#decode', function() {
@@ -62,6 +79,26 @@ describe('Jwt', function() {
         });
         done();
       });
+    });
+    
+    it('should not catch errors thrown from callback', function(done) {
+      var jwt = new Jwt('secret', encoder);
+      var error;
+      try {
+        jwt.decode({
+          key: 'secret',
+          decoded: {
+            data: 'some data'
+          }
+        }, function(err, decoded) {
+          throw new Error('this is a test');
+        });
+      } catch(err) {
+        error = err;
+      }
+      should.exist(error);
+      error.toString().should.eql((new Error('this is a test')).toString());
+      done();
     });
   });
   
