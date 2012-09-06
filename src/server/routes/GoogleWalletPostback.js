@@ -1,6 +1,6 @@
 module.exports = function(jwt, User, Event, Payment) {
   this.post = function(req, res) {
-    var details = jwt.decode(req.body);
+    var details = jwt.decode(req.body.jwt);
     var sellerData = JSON.parse(details.request.sellerData);
     User.findById(sellerData.userId, function(error, user) {
       if (error) {

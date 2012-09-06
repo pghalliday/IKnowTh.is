@@ -13,23 +13,25 @@ describe('GoogleWalletPostback', function() {
 
   // define a mock request object
   var mockRequest = {
-    body: mockJwt.encode({ 
-      iss: 'Google',
-      aud: '1337133713371337',
-      typ: 'google/payments/inapp/item/v1/postback/buy',
-      iat: '1309988959',
-      exp: '1409988959',
-      request: {
-        name: 'Piece of Cake',
-        description: 'Virtual chocolate cake to fill your virtual tummy',
-        price: '10.50',
-        currencyCode: 'USD',
-        sellerData: '{"userId":123,"eventId":789}'
-      },
-      response: {
-        orderId: '1234567890'
-      }
-    })
+    body: {
+      jwt:  mockJwt.encode({ 
+        iss: 'Google',
+        aud: '1337133713371337',
+        typ: 'google/payments/inapp/item/v1/postback/buy',
+        iat: '1309988959',
+        exp: '1409988959',
+        request: {
+          name: 'Piece of Cake',
+          description: 'Virtual chocolate cake to fill your virtual tummy',
+          price: '10.50',
+          currencyCode: 'USD',
+          sellerData: '{"userId":123,"eventId":789}'
+        },
+        response: {
+          orderId: '1234567890'
+        }
+      })
+    }
   };
      
   // define a mock user table
