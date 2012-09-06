@@ -1,4 +1,4 @@
-module.exports = function(postbackUrl, aud, request, jwt) {
+module.exports = function(postbackUrl, aud, request, jwt) {  
   this.post = function(iat, exp, requestData, orderId, callback) {
     jwt.encode({
       iss: 'Google',

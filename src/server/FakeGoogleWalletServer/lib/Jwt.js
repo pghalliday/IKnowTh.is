@@ -1,8 +1,10 @@
-module.exports = function(key, encoder) {
+module.exports = function(key) {
+  var jwtSimple = require('jwt-simple');
+  
   this.encode = function(payload, callback) {
     var error, token;
     try {
-      token = encoder.encode(payload, key);
+      token = jwtSimple.encode(payload, key);
     } catch(err) {
       error = err;
     }
@@ -12,7 +14,7 @@ module.exports = function(key, encoder) {
   this.decode = function(token, callback) {
     var error, payload;
     try {
-      payload = encoder.decode(token, key);
+      payload = jwtSimple.decode(token, key);
     } catch(err) {
       error = err;
     }

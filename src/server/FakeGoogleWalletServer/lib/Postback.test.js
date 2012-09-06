@@ -1,12 +1,13 @@
 describe('Postback', function() {
   var Postback = require('./Postback'),
+      Jwt = require('./Jwt'),
       should = require('should');
 
   var postbackUrlChecked, postbackBodyChecked, postbackEndCalled;
 
   describe('#post', function() {
     it('should post a correct JWT to the postback url', function(done) {
-      var jwt = new Jwt(null);
+      var jwt = new Jwt('secret');
       var request = new Request(true, '456789123');
       var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
       postbackUrlChecked = false;
@@ -35,19 +36,18 @@ describe('Postback', function() {
     });
     
     it('should return an error if the jwt cannot be encoded', function(done) {
-      var jwt = new Jwt(new Error('This is a test'));
+      var jwt = new Jwt(null);
       var request = new Request(true, '456789123');
       var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
       postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
         should.exist(err);
-        err.toString().should.eql((new Error('This is a test')).toString());
         should.not.exist(postbackJwt);
         done();
       });
     });
     
     it('should return an error if the postback request does not return the orderId', function(done) {
-      var jwt = new Jwt(null);
+      var jwt = new Jwt('secret');
       var request = new Request(true, 'some random text');
       var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
       postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
@@ -59,7 +59,7 @@ describe('Postback', function() {
     });
     
     it('should return an error if the postback request does not return 200 OK', function(done) {
-      var jwt = new Jwt(null);
+      var jwt = new Jwt('secret');
       var request = new Request(false, '456789123');
       var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
       postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
@@ -77,7 +77,7 @@ describe('Postback', function() {
       postbackUrlChecked = true;
       return {
         send: function(body) {
-          var jwt = new Jwt(null);
+          var jwt = new Jwt('secret');
           jwt.encode({
             iss: 'Google',
             aud: 'MySeller',
@@ -105,18 +105,6 @@ describe('Postback', function() {
           };
         },
       };
-    };
-  };
-
-  var Jwt = function(err) {
-    this.encode = function(decoded, callback) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, {
-          decoded: decoded
-        });
-      }
     };
   };
 });
