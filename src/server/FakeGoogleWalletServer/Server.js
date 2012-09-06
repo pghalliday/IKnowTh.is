@@ -10,8 +10,8 @@ module.exports = function(responder) {
     });
   });
 
-  this.app.post('/purchaseCancel', function(req, res) {
-    responder.purchaseCancel(req.body, function(status, body) {
+  this.app.post('/cancel', function(req, res) {
+    responder.cancel(req.body, function(status, body) {
       res.send(status, body);
     });
   });

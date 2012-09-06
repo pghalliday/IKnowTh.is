@@ -1,5 +1,5 @@
 module.exports = function(jwt, response, orderId, postback) {
-  this.respond = function(requestData, callback) {
+  this.purchase = function(requestData, callback) {
     if (requestData.jwt) {
       jwt.decode(requestData.jwt, function(err, decoded) {
         if (err) {

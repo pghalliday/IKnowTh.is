@@ -16,7 +16,7 @@ describe('Server', function() {
       data.should.eql(requestBody);
       callback(responseStatus, responseBody);
     },
-    purchaseCancel: function(data, callback) {
+    cancel: function(data, callback) {
       responded = true;
       data.should.eql(requestBody);
       callback(cancelResponseStatus, cancelResponseBody);
@@ -35,10 +35,10 @@ describe('Server', function() {
     });
   });
   
-  describe('POST /purchaseCancelled', function() {
-    it('should use purchaseCancel method to process requests correctly', function(done) {
+  describe('POST /cancel', function() {
+    it('should use cancel method to process requests correctly', function(done) {
       responded = false;
-      request(server.app).post('/purchaseCancel').send(requestBody).expect(cancelResponseStatus, cancelResponseBody, function(err) {
+      request(server.app).post('/cancel').send(requestBody).expect(cancelResponseStatus, cancelResponseBody, function(err) {
         responded.should.eql(true);
         done(err);
       });

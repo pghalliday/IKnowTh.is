@@ -5,7 +5,7 @@ describe('Responder', function() {
   it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData is not an object with a jwt field', function(done) {
     var response = new Response(null, 'MERCHANT_ERROR');
     var responder = new Responder(jwt, response);    
-    responder.respond('invalid request data', function(status, body) {
+    responder.purchase('invalid request data', function(status, body) {
       status.should.eql(500);
       body.should.eql(response.body);
       done();
@@ -15,7 +15,7 @@ describe('Responder', function() {
   it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData jwt field cannot be decoded', function(done) {
     var response = new Response(null, 'MERCHANT_ERROR');
     var responder = new Responder(jwt, response);    
-    responder.respond({
+    responder.purchase({
       jwt: 'invalid jwt data'
     }, function(status, body) {
       status.should.eql(500);
@@ -27,7 +27,7 @@ describe('Responder', function() {
   it('should respond with status 500 and correct MERCHANT_ERROR response if the JWT does not contain a request field', function(done) {
     var response = new Response(null, 'MERCHANT_ERROR');
     var responder = new Responder(jwt, response);    
-    responder.respond({
+    responder.purchase({
       jwt: {
         decoded: 'invalid decoded data'
       }
@@ -42,7 +42,7 @@ describe('Responder', function() {
     var orderId = new OrderId(true);
     var response = new Response('valid request', 'INTERNAL_SERVER_ERROR');
     var responder = new Responder(jwt, response, orderId);    
-    responder.respond({
+    responder.purchase({
       jwt: {
         decoded: {
           request: 'valid request'
@@ -59,7 +59,7 @@ describe('Responder', function() {
     var orderId = new OrderId(false);
     var response = new Response(null, null, orderId);
     var responder = new Responder(jwt, response, orderId, postback);    
-    responder.respond({
+    responder.purchase({
       jwt: {
         decoded: {
           request: 'valid request'
@@ -76,7 +76,7 @@ describe('Responder', function() {
     var orderId = new OrderId(false);
     var response = new Response('valid request', 'POSTBACK_ERROR', orderId);
     var responder = new Responder(jwt, response, orderId, postback);    
-    responder.respond({
+    responder.purchase({
       jwt: {
         decoded: {
           request: {
