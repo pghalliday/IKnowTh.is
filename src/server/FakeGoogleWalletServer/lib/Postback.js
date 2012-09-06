@@ -1,12 +1,12 @@
-module.exports = function(postbackUrl, aud, request, jwt) {  
-  this.post = function(iat, exp, requestData, orderId, callback) {
+module.exports = function(postbackUrl, sellerId, superagent, jwt) {  
+  this.post = function(iat, exp, request, orderId, callback) {
     jwt.encode({
       iss: 'Google',
-      aud: aud,
+      aud: sellerId,
       typ: 'google/payments/inapp/item/v1/postback/buy',
       iat: iat,
       exp: exp,
-      request: requestData,
+      request: request,
       response: {
         orderId: orderId
       }
@@ -14,7 +14,7 @@ module.exports = function(postbackUrl, aud, request, jwt) {
       if (err) {
         callback(err, null);
       } else {
-        request.post(postbackUrl).send({
+        superagent.post(postbackUrl).send({
           jwt: encoded
         }).end(function(res) {
           if (res.ok && res.text === orderId) {

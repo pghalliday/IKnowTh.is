@@ -1,4 +1,4 @@
-module.exports = function(jwt, response, orderId, postback) {
+module.exports = function(jwt, sellerId, response, orderId, postback) {
   this.purchase = function(requestData, cancel, callback) {
     if (requestData.jwt) {
       jwt.decode(requestData.jwt, function(err, decoded) {
@@ -7,7 +7,7 @@ module.exports = function(jwt, response, orderId, postback) {
             callback(500, body);
           });
         } else {
-          if (decoded.request) {
+          if (decoded.request && decoded.iat && decoded.exp && decoded.aud === 'Google' && decoded.iss === sellerId && decoded.typ === 'google/payments/inapp/item/v1') {
             if (cancel) {
               response.error(decoded.request, 'PURCHASE_CANCELLED', function(body) {
                 callback(500, body);
@@ -15,13 +15,13 @@ module.exports = function(jwt, response, orderId, postback) {
             } else {
               var id = orderId.next();
               var now = Date.now();
-              postback.post(now.toString(), (now + (1000 * 60 * 60)).toString(), decoded.request, id, function(err, postbackData) {
+              postback.post(decoded.iat, decoded.exp, decoded.request, id.toString(), function(err, postbackData) {
                 if (err) {
                   response.error(decoded.request, 'POSTBACK_ERROR', function(body) {
                     callback(500, body);
                   });
                 } else {
-                  response.success(decoded.request, id, postbackData, function(body) {
+                  response.success(decoded.request, id.toString(), postbackData, function(body) {
                     callback(200, body);
                   });
                 }

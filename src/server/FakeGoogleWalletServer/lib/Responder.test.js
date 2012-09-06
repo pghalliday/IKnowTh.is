@@ -11,7 +11,7 @@ describe('Responder', function() {
   describe('#purchase', function() {
     it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData is not an object with a jwt field', function(done) {
       var response = new Response(null, 'MERCHANT_ERROR');
-      var responder = new Responder(jwt, response, orderId, postback);    
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
       responder.purchase('invalid request data', false, function(status, body) {
         status.should.eql(500);
         body.should.eql(response.body);
@@ -21,7 +21,7 @@ describe('Responder', function() {
     
     it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData jwt field cannot be decoded', function(done) {
       var response = new Response(null, 'MERCHANT_ERROR');
-      var responder = new Responder(jwt, response, orderId, postback);
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);
       responder.purchase({
         jwt: 'invalid jwt data'
       }, false, function(status, body) {
@@ -33,7 +33,7 @@ describe('Responder', function() {
     
     it('should respond with status 500 and correct MERCHANT_ERROR response if the JWT does not contain a request field', function(done) {
       var response = new Response(null, 'MERCHANT_ERROR');
-      var responder = new Responder(jwt, response, orderId, postback);
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);
       responder.purchase({
         jwt: jwtSimple.encode({
           data: 'some data'
@@ -47,9 +47,14 @@ describe('Responder', function() {
 
     it('should postback and respond with 200 and correct success body', function(done) {
       var response = new Response(null, null, orderId);
-      var responder = new Responder(jwt, response, orderId, postback);    
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
       responder.purchase({
         jwt: jwtSimple.encode({
+          iss: 'MySeller',
+          aud: 'Google',
+          typ: 'google/payments/inapp/item/v1',
+          iat: '123456789',
+          exp: '987654321',
           request: 'valid request'
         }, 'secret')
       }, false, function(status, body) {
@@ -63,11 +68,16 @@ describe('Responder', function() {
       var response = new Response({
         failPostback: true            
       }, 'POSTBACK_ERROR', orderId);
-      var responder = new Responder(jwt, response, orderId, postback);    
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
       responder.purchase({
         jwt: jwtSimple.encode({
+          iss: 'MySeller',
+          aud: 'Google',
+          typ: 'google/payments/inapp/item/v1',
+          iat: '123456789',
+          exp: '987654321',
           request: {
-            failPostback: true            
+            failPostback: true
           }
         }, 'secret')
       }, false, function(status, body) {
@@ -79,9 +89,14 @@ describe('Responder', function() {
     
     it('should respond with 500 and correct PURCHASE_CANCELLED response if flagged to cancel', function(done) {
       var response = new Response('valid request', 'PURCHASE_CANCELLED', orderId);
-      var responder = new Responder(jwt, response, orderId, postback);    
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
       responder.purchase({
         jwt: jwtSimple.encode({
+          iss: 'MySeller',
+          aud: 'Google',
+          typ: 'google/payments/inapp/item/v1',
+          iat: '123456789',
+          exp: '987654321',
           request: 'valid request'
         }, 'secret')
       }, true, function(status, body) {
@@ -109,7 +124,7 @@ describe('Responder', function() {
     
     this.success = function(request, id, postbackData, callback) {
       request.should.be.eql('valid request');
-      id.should.be.eql(orderId.currentId);
+      id.should.be.eql(orderId.currentId.toString());
       postbackData.should.be.eql(postback.data);
       this.body = {
         request: request,

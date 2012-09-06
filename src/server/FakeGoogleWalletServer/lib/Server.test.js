@@ -1,7 +1,7 @@
 describe('Server', function() {
   var Server = require('./Server'),
       should = require('should'),
-      request = require('supertest');
+      supertest = require('supertest');
 
   var requestBody = {body: 'my request'};
   var responseStatus = 201;
@@ -27,7 +27,7 @@ describe('Server', function() {
   describe('POST /purchase', function() {
     it('should use purchase method to process requests correctly', function(done) {
       responded = false;
-      request(server.app).post('/purchase').send(requestBody).expect(responseStatus, responseBody, function(err) {
+      supertest(server.app).post('/purchase').send(requestBody).expect(responseStatus, responseBody, function(err) {
         responded.should.eql(true);
         done(err);
       });
@@ -35,9 +35,19 @@ describe('Server', function() {
   });
   
   describe('POST /cancel', function() {
-    it('should use cancel method to process requests correctly', function(done) {
+    it('should use purchase method to process cancelled requests correctly', function(done) {
       responded = false;
-      request(server.app).post('/cancel').send(requestBody).expect(cancelResponseStatus, cancelResponseBody, function(err) {
+      supertest(server.app).post('/cancel').send(requestBody).expect(cancelResponseStatus, cancelResponseBody, function(err) {
+        responded.should.eql(true);
+        done(err);
+      });
+    });
+  });
+  
+  describe('POST /postback', function() {
+    it('should use postback method to process requests correctly', function(done) {
+      responded = false;
+      supertest(server.app).post('/postback').send(postbackBody).expect(cancelResponseStatus, cancelResponseBody, function(err) {
         responded.should.eql(true);
         done(err);
       });

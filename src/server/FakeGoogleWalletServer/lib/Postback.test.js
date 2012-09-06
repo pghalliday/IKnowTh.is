@@ -8,8 +8,8 @@ describe('Postback', function() {
   describe('#post', function() {
     it('should post a correct JWT to the postback url', function(done) {
       var jwt = new Jwt('secret');
-      var request = new Request(true, '456789123');
-      var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
+      var superagent = new Superagent(true, '456789123');
+      var postback = new Postback('http://localhost/postback', 'MySeller', superagent, jwt);
       postbackUrlChecked = false;
       postbackBodyChecked = false;
       postbackEndCalled = false;
@@ -37,8 +37,8 @@ describe('Postback', function() {
     
     it('should return an error if the jwt cannot be encoded', function(done) {
       var jwt = new Jwt(null);
-      var request = new Request(true, '456789123');
-      var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
+      var superagent = new Superagent(true, '456789123');
+      var postback = new Postback('http://localhost/postback', 'MySeller', superagent, jwt);
       postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
         should.exist(err);
         should.not.exist(postbackJwt);
@@ -48,8 +48,8 @@ describe('Postback', function() {
     
     it('should return an error if the postback request does not return the orderId', function(done) {
       var jwt = new Jwt('secret');
-      var request = new Request(true, 'some random text');
-      var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
+      var superagent = new Superagent(true, 'some random text');
+      var postback = new Postback('http://localhost/postback', 'MySeller', superagent, jwt);
       postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
         should.exist(err);
         err.toString().should.eql((new Error('Postback failed')).toString());
@@ -60,8 +60,8 @@ describe('Postback', function() {
     
     it('should return an error if the postback request does not return 200 OK', function(done) {
       var jwt = new Jwt('secret');
-      var request = new Request(false, '456789123');
-      var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
+      var superagent = new Superagent(false, '456789123');
+      var postback = new Postback('http://localhost/postback', 'MySeller', superagent, jwt);
       postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
         should.exist(err);
         err.toString().should.eql((new Error('Postback failed')).toString());
@@ -71,7 +71,7 @@ describe('Postback', function() {
     });
   });
 
-  var Request = function(ok, text) {
+  var Superagent = function(ok, text) {
     this.post = function(url) {
       url.should.eql('http://localhost/postback');
       postbackUrlChecked = true;
