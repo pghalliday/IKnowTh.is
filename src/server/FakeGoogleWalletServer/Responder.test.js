@@ -2,95 +2,103 @@ describe('Responder', function() {
   var Responder = require('./Responder'),
       should = require('should');
 
-  it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData is not an object with a jwt field', function(done) {
-    var response = new Response(null, 'MERCHANT_ERROR');
-    var responder = new Responder(jwt, response);    
-    responder.purchase('invalid request data', function(status, body) {
-      status.should.eql(500);
-      body.should.eql(response.body);
-      done();
+  describe('#purchase', function() {
+    it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData is not an object with a jwt field', function(done) {
+      var response = new Response(null, 'MERCHANT_ERROR');
+      var responder = new Responder(jwt, response);    
+      responder.purchase('invalid request data', function(status, body) {
+        status.should.eql(500);
+        body.should.eql(response.body);
+        done();
+      });
     });
-  });
-  
-  it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData jwt field cannot be decoded', function(done) {
-    var response = new Response(null, 'MERCHANT_ERROR');
-    var responder = new Responder(jwt, response);    
-    responder.purchase({
-      jwt: 'invalid jwt data'
-    }, function(status, body) {
-      status.should.eql(500);
-      body.should.eql(response.body);
-      done();
+    
+    it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData jwt field cannot be decoded', function(done) {
+      var response = new Response(null, 'MERCHANT_ERROR');
+      var responder = new Responder(jwt, response);    
+      responder.purchase({
+        jwt: 'invalid jwt data'
+      }, function(status, body) {
+        status.should.eql(500);
+        body.should.eql(response.body);
+        done();
+      });
     });
-  });
-  
-  it('should respond with status 500 and correct MERCHANT_ERROR response if the JWT does not contain a request field', function(done) {
-    var response = new Response(null, 'MERCHANT_ERROR');
-    var responder = new Responder(jwt, response);    
-    responder.purchase({
-      jwt: {
-        decoded: 'invalid decoded data'
-      }
-    }, function(status, body) {
-      status.should.eql(500);
-      body.should.eql(response.body);
-      done();
-    });
-  });
-
-  it('should respond with status 500 and correct INTERNAL_SERVER_ERROR response if an order ID cannot be assigned', function(done) {
-    var orderId = new OrderId(true);
-    var response = new Response('valid request', 'INTERNAL_SERVER_ERROR');
-    var responder = new Responder(jwt, response, orderId);    
-    responder.purchase({
-      jwt: {
-        decoded: {
-          request: 'valid request'
+    
+    it('should respond with status 500 and correct MERCHANT_ERROR response if the JWT does not contain a request field', function(done) {
+      var response = new Response(null, 'MERCHANT_ERROR');
+      var responder = new Responder(jwt, response);    
+      responder.purchase({
+        jwt: {
+          decoded: 'invalid decoded data'
         }
-      }
-    }, function(status, body) {
-      status.should.eql(500);
-      body.should.eql(response.body);
-      done();
+      }, function(status, body) {
+        status.should.eql(500);
+        body.should.eql(response.body);
+        done();
+      });
     });
-  });
 
-  it('should postback and respond with 200 and correct success body', function(done) {
-    var orderId = new OrderId(false);
-    var response = new Response(null, null, orderId);
-    var responder = new Responder(jwt, response, orderId, postback);    
-    responder.purchase({
-      jwt: {
-        decoded: {
-          request: 'valid request'
-        }
-      }
-    }, function(status, body) {
-      status.should.eql(200);
-      body.should.eql(response.body);
-      done();
-    });
-  });
-  
-  it('should postback and respond with 500 and correct POSTBACK_ERROR response when postback fails', function(done) {
-    var orderId = new OrderId(false);
-    var response = new Response('valid request', 'POSTBACK_ERROR', orderId);
-    var responder = new Responder(jwt, response, orderId, postback);    
-    responder.purchase({
-      jwt: {
-        decoded: {
-          request: {
-            failPostback: true            
+    it('should respond with status 500 and correct INTERNAL_SERVER_ERROR response if an order ID cannot be assigned', function(done) {
+      var orderId = new OrderId(true);
+      var response = new Response('valid request', 'INTERNAL_SERVER_ERROR');
+      var responder = new Responder(jwt, response, orderId);    
+      responder.purchase({
+        jwt: {
+          decoded: {
+            request: 'valid request'
           }
         }
-      }
-    }, function(status, body) {
-      status.should.eql(500);
-      body.should.eql(response.body);
-      done();
+      }, function(status, body) {
+        status.should.eql(500);
+        body.should.eql(response.body);
+        done();
+      });
+    });
+
+    it('should postback and respond with 200 and correct success body', function(done) {
+      var orderId = new OrderId(false);
+      var response = new Response(null, null, orderId);
+      var responder = new Responder(jwt, response, orderId, postback);    
+      responder.purchase({
+        jwt: {
+          decoded: {
+            request: 'valid request'
+          }
+        }
+      }, function(status, body) {
+        status.should.eql(200);
+        body.should.eql(response.body);
+        done();
+      });
+    });
+    
+    it('should postback and respond with 500 and correct POSTBACK_ERROR response when postback fails', function(done) {
+      var orderId = new OrderId(false);
+      var response = new Response('valid request', 'POSTBACK_ERROR', orderId);
+      var responder = new Responder(jwt, response, orderId, postback);    
+      responder.purchase({
+        jwt: {
+          decoded: {
+            request: {
+              failPostback: true            
+            }
+          }
+        }
+      }, function(status, body) {
+        status.should.eql(500);
+        body.should.eql(response.body);
+        done();
+      });
     });
   });
 
+  describe('#cancel', function() {
+    it('should', function(done) {
+      /* TODO */
+      done();
+    });
+  });
 
   var Response = function(expectedRequest, expectedError, orderId) {
     this.error = function(request, error, callback) {
