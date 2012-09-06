@@ -14,7 +14,8 @@ module.exports = function(jwt, response, orderId, postback) {
                   callback(500, body);
                 });
               } else {
-                postback.post(decoded, id, function(err, postbackData) {
+                var now = Date.now();
+                postback.post(now.toString(), (now + (1000 * 60 * 60)).toString(), decoded.request, id, function(err, postbackData) {
                   if (err) {
                     response.error(decoded.request, 'POSTBACK_ERROR', function(body) {
                       callback(500, body);

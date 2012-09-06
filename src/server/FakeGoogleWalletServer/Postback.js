@@ -1,5 +1,5 @@
-module.exports = function(postbackUrl, request, jwt) {
-  this.post = function(aud, iat, exp, requestData, orderId, callback) {
+module.exports = function(postbackUrl, aud, request, jwt) {
+  this.post = function(iat, exp, requestData, orderId, callback) {
     jwt.encode({
       iss: 'Google',
       aud: aud,

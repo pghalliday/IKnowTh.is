@@ -79,8 +79,9 @@ describe('Responder', function() {
     responder.respond({
       jwt: {
         decoded: {
-          request: 'valid request',
-          failPostback: true
+          request: {
+            failPostback: true            
+          }
         }
       }
     }, function(status, body) {
@@ -146,13 +147,15 @@ describe('Responder', function() {
   };
 
   var postback = {
-    post: function(decodedJwt, orderId, callback) {
+    post: function(iat, exp, requestData, orderId, callback) {
       var self = this;
-      if (decodedJwt.failPostback) {
+      if (requestData.failPostback) {
         callback(new Error('Postback failed'), null);
       } else {
         jwt.encode({
-          decodedJwt: decodedJwt,
+          iat: iat,
+          exp: exp,
+          requestData: requestData,
           orderId: orderId
         }, function(err, encoded) {
           self.data = encoded;

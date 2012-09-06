@@ -8,11 +8,11 @@ describe('Postback', function() {
     it('should post a correct JWT to the postback url', function(done) {
       var jwt = new Jwt(null);
       var request = new Request(true, '456789123');
-      var postback = new Postback('http://localhost/postback', request, jwt);
+      var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
       postbackUrlChecked = false;
       postbackBodyChecked = false;
       postbackEndCalled = false;
-      postback.post('MySeller', '123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
+      postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
         postbackUrlChecked.should.eql(true);
         postbackBodyChecked.should.eql(true);
         postbackEndCalled.should.eql(true);
@@ -37,8 +37,8 @@ describe('Postback', function() {
     it('should return an error if the jwt cannot be encoded', function(done) {
       var jwt = new Jwt(new Error('This is a test'));
       var request = new Request(true, '456789123');
-      var postback = new Postback('http://localhost/postback', request, jwt);
-      postback.post('MySeller', '123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
+      var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
+      postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
         should.exist(err);
         err.toString().should.eql((new Error('This is a test')).toString());
         should.not.exist(postbackJwt);
@@ -49,8 +49,8 @@ describe('Postback', function() {
     it('should return an error if the postback request does not return the orderId', function(done) {
       var jwt = new Jwt(null);
       var request = new Request(true, 'some random text');
-      var postback = new Postback('http://localhost/postback', request, jwt);
-      postback.post('MySeller', '123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
+      var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
+      postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
         should.exist(err);
         err.toString().should.eql((new Error('Postback failed')).toString());
         should.not.exist(postbackJwt);
@@ -61,8 +61,8 @@ describe('Postback', function() {
     it('should return an error if the postback request does not return 200 OK', function(done) {
       var jwt = new Jwt(null);
       var request = new Request(false, '456789123');
-      var postback = new Postback('http://localhost/postback', request, jwt);
-      postback.post('MySeller', '123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
+      var postback = new Postback('http://localhost/postback', 'MySeller', request, jwt);
+      postback.post('123456789', '789456123', 'My Request', '456789123', function(err, postbackJwt) {
         should.exist(err);
         err.toString().should.eql((new Error('Postback failed')).toString());
         should.not.exist(postbackJwt);
