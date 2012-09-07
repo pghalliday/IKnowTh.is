@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script src='//hangoutsapi.talkgadget.google.com/talkgadget/apps/gadgets/js/rpc.js'></script>
+  <script src='//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=1.2></script>
+  <script src='https://apis.google.com/js/client.js?onload=onClientReady'></script>
+  <script src="../../qunit.js"></script>
+  <script src="../../require.js"></script>
+  <script>
+    QUnit.config.autostart = false;
+    function onClientReady() {
+      require(['Hangout.test'], function (tests) {
+        QUnit.start();
+        tests.run();
+      });
+    }
+  </script>
+</body>
+</html>
