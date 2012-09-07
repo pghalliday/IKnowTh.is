@@ -48,7 +48,7 @@ describe('Jwt', function() {
   });
   
   describe('#decode', function() {
-    it('should fail if encoder throws an error', function(done) {
+    it('should fail if decoder throws an error', function(done) {
       var jwt = new Jwt('wrong secret');
       jwt.decode(jwtSimple.encode({
         data: 'some data'
@@ -59,7 +59,7 @@ describe('Jwt', function() {
       });
     });
     
-    it('should decode using encoder', function(done) {
+    it('should decode using decoder', function(done) {
       var jwt = new Jwt('secret');
       jwt.decode(jwtSimple.encode({
         data: 'some data'
