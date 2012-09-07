@@ -4,21 +4,26 @@ describe('Server', function() {
       supertest = require('supertest');
 
   var requestBody = {body: 'my request'};
+  var postbackRequestBody = {body: 'my postback request'};
   var responseStatus = 201;
   var cancelResponseStatus = 501;
+  var postbackResponseStatus = 202;
   var responseBody = 'my response';
   var cancelResponseBody = 'my cancel response';
-  var responded;
+  var postbackResponseBody = 'my postback response';
   
   var responder = {
     purchase: function(data, cancel, callback) {
-      responded = true;
       data.should.eql(requestBody);
       if (cancel) {
         callback(cancelResponseStatus, cancelResponseBody);
       } else {
         callback(responseStatus, responseBody);
       }
+    },
+    postback: function(data, callback) {
+      data.should.eql(postbackRequestBody);
+      callback(postbackResponseStatus, postbackResponseBody);
     }
   };
   
@@ -26,31 +31,19 @@ describe('Server', function() {
 
   describe('POST /purchase', function() {
     it('should use purchase method to process requests correctly', function(done) {
-      responded = false;
-      supertest(server.app).post('/purchase').send(requestBody).expect(responseStatus, responseBody, function(err) {
-        responded.should.eql(true);
-        done(err);
-      });
+      supertest(server.app).post('/purchase').send(requestBody).expect(responseStatus, responseBody, done);
     });
   });
   
   describe('POST /cancel', function() {
     it('should use purchase method to process cancelled requests correctly', function(done) {
-      responded = false;
-      supertest(server.app).post('/cancel').send(requestBody).expect(cancelResponseStatus, cancelResponseBody, function(err) {
-        responded.should.eql(true);
-        done(err);
-      });
+      supertest(server.app).post('/cancel').send(requestBody).expect(cancelResponseStatus, cancelResponseBody, done);
     });
   });
   
   describe('POST /postback', function() {
     it('should use postback method to process requests correctly', function(done) {
-      responded = false;
-      supertest(server.app).post('/postback').send(postbackBody).expect(cancelResponseStatus, cancelResponseBody, function(err) {
-        responded.should.eql(true);
-        done(err);
-      });
+      supertest(server.app).post('/postback').send(postbackRequestBody).expect(postbackResponseStatus, postbackResponseBody, done);
     });
   });
 });

@@ -38,7 +38,7 @@ describe('FakeGoogleWalletServer', function() {
       exp: anHourFromNow.toString(),
       request: request,
       response: {
-        orderId: "10000"
+        orderId: '10000'
       }
     }, 'secret')
   };
@@ -50,13 +50,13 @@ describe('FakeGoogleWalletServer', function() {
   };
 
   describe('POST /purchase', function() {
-    it('should respond on /purchase', function(done) {
+    it('should respond with correct success response', function(done) {
       supertest(fakeGoogleWalletServer.app).post('/purchase').send(requestBody).expect(200, responseBody, done);
     });
   });
   
   describe('POST /cancel', function() {
-    it('should respond on /cancel', function(done) {
+    it('should respond with correct cancel response', function(done) {
       supertest(fakeGoogleWalletServer.app).post('/cancel').send(requestBody).expect(500, cancelResponseBody, done);
     });
   });

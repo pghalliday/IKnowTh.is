@@ -9,36 +9,10 @@ describe('Responder', function() {
       orderId = new OrderId(10000);
 
   describe('#purchase', function() {
-    it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData is not an object with a jwt field', function(done) {
+    it('should respond with status 500 and correct MERCHANT_ERROR response if the request body is not valid', function(done) {
       var response = new Response(null, 'MERCHANT_ERROR');
       var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
-      responder.purchase('invalid request data', false, function(status, body) {
-        status.should.eql(500);
-        body.should.eql(response.body);
-        done();
-      });
-    });
-    
-    it('should respond with status 500 and correct MERCHANT_ERROR response if the requestData jwt field cannot be decoded', function(done) {
-      var response = new Response(null, 'MERCHANT_ERROR');
-      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);
-      responder.purchase({
-        jwt: 'invalid jwt data'
-      }, false, function(status, body) {
-        status.should.eql(500);
-        body.should.eql(response.body);
-        done();
-      });
-    });
-    
-    it('should respond with status 500 and correct MERCHANT_ERROR response if the JWT does not contain a request field', function(done) {
-      var response = new Response(null, 'MERCHANT_ERROR');
-      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);
-      responder.purchase({
-        jwt: jwtSimple.encode({
-          data: 'some data'
-        }, 'secret')
-      }, false, function(status, body) {
+      responder.purchase('invalid request body', false, function(status, body) {
         status.should.eql(500);
         body.should.eql(response.body);
         done();
@@ -102,6 +76,79 @@ describe('Responder', function() {
       }, true, function(status, body) {
         status.should.eql(500);
         body.should.eql(response.body);
+        done();
+      });
+    });
+  });
+
+  describe('#postback', function() {
+    it('should respond with 200 OK and the orderId if request is valid', function(done) {
+      var responder = new Responder(jwt, null, null, null, null);    
+      responder.postback({
+        jwt: jwtSimple.encode({
+          iss: 'Google',
+          aud: 'MySeller',
+          typ: 'google/payments/inapp/item/v1/postback/buy',
+          iat: '123456789',
+          exp: '987654321',
+          request: 'valid request',
+          response: {
+            orderId: '10000'
+          }
+        }, 'secret')
+      }, function(status, body) {
+        status.should.eql(200);
+        body.should.eql('10000');
+        done();
+      });
+    });
+    
+    it('should respond with 500 error if request does not contain jwt field', function(done) {
+      var responder = new Responder(jwt, null, null, null, null);    
+      responder.postback({
+        data: 'some data'
+      }, function(status, body) {
+        status.should.eql(500);
+        body.should.eql('Invalid postback');
+        done();
+      });
+    });
+    
+    it('should respond with 500 error if jwt field cannot be decoded', function(done) {
+      var responder = new Responder(jwt, null, null, null, null);    
+      responder.postback({
+        jwt: jwtSimple.encode({
+          iss: 'Google',
+          aud: 'MySeller',
+          typ: 'google/payments/inapp/item/v1/postback/buy',
+          iat: '123456789',
+          exp: '987654321',
+          request: 'valid request',
+          response: {
+            orderId: '10000'
+          }
+        }, 'wrong secret')
+      }, function(status, body) {
+        status.should.eql(500);
+        body.should.eql('Invalid postback JWT');
+        done();
+      });
+    });
+    
+    it('should respond with 500 error if JWT does not contain an order ID', function(done) {
+      var responder = new Responder(jwt, null, null, null, null);    
+      responder.postback({
+        jwt: jwtSimple.encode({
+          iss: 'Google',
+          aud: 'MySeller',
+          typ: 'google/payments/inapp/item/v1/postback/buy',
+          iat: '123456789',
+          exp: '987654321',
+          request: 'valid request'
+        }, 'secret')
+      }, function(status, body) {
+        status.should.eql(500);
+        body.should.eql('Missing order ID');
         done();
       });
     });

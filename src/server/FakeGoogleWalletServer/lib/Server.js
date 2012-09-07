@@ -15,5 +15,11 @@ module.exports = function(responder) {
       res.send(status, body);
     });
   });
+
+  this.app.post('/postback', function(req, res) {
+    responder.postback(req.body, function(status, body) {
+      res.send(status, body);
+    });
+  });
 };
 
