@@ -12,14 +12,17 @@ module.exports = function(grunt) {
       banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %>\n' + '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' + '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' + ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
     },
     lint: {
-      files: ['grunt.js', 'src/grunt/**/*.js', 'src/server/**/*.js']
+      files: ['grunt.js', 'src/grunt/**/*.js', 'src/server/**/*.js', 'src/static/js/site/**/*.js']
     },
     test: {
       files: ['src/server/**/*.test.js']
     },
+    qunit: {
+      files: ['src/static/js/site/**/*.test.html']
+    },
     watch: {
       files: ['grunt.js', 'src/grunt/**/*.js', 'src/server/**/*.js'],
-      tasks: 'lint test'
+      tasks: 'lint test qunit'
     },
     jshint: {
       options: {
@@ -40,7 +43,10 @@ module.exports = function(grunt) {
         "before", // Used by mocha
         "beforeEach", // Used by mocha
         "after", // Used by mocha
-        "afterEach" // Used by mocha
+        "afterEach", // Used by mocha
+        "define", // Used by RequireJS
+        "test", // Used by QUnit
+        "ok" // Used by QUnit
         ]
       }
     },
@@ -52,6 +58,6 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint test');
+  grunt.registerTask('default', 'lint test qunit');
 
 };

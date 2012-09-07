@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QUnit Example</title>
+  <link rel="stylesheet" href="../../../css/qunit.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <script src="../../qunit.js"></script>
+  <script src="../../require.js"></script>
+  <script>
+    QUnit.config.autostart = false;
+    require(['GoogleWalletWrapper.test'], function (tests) {
+      QUnit.start();
+      tests.run();
+    });
+  </script>
+</body>
+</html>
