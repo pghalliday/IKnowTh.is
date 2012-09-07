@@ -4,7 +4,8 @@ describe('FakeGoogleWalletServer', function() {
       jwtSimple = require('jwt-simple'),
       supertest = require('supertest');
   
-  var fakeGoogleWalletServer = new FakeGoogleWalletServer('MySeller', 'secret', '/postback', 10000);
+  var fakeGoogleWalletServer = new FakeGoogleWalletServer(3001, 'MySeller', 'secret', 'http://localhost:3001/postback', 10000),
+      app;
   
   var now = Date.now();
   var anHourFromNow = now + (1000 * 60 * 60);
@@ -26,7 +27,7 @@ describe('FakeGoogleWalletServer', function() {
     }, 'secret')
   };
   var responseBody = {
-    request: requestBody.jwt.request,
+    request: request,
     response: {
       orderId: "10000"
     },
@@ -49,15 +50,26 @@ describe('FakeGoogleWalletServer', function() {
     }
   };
 
+  before(function(done) {
+    fakeGoogleWalletServer.start(function(err, httpServer) {
+      app = httpServer;
+      done(err);
+    });
+  });
+  
+  after(function(done) {
+    fakeGoogleWalletServer.stop(done);    
+  });
+
   describe('POST /purchase', function() {
     it('should respond with correct success response', function(done) {
-      supertest(fakeGoogleWalletServer.app).post('/purchase').send(requestBody).expect(200, responseBody, done);
+      supertest(app).post('/purchase').send(requestBody).expect(200, responseBody, done);
     });
   });
   
   describe('POST /cancel', function() {
     it('should respond with correct cancel response', function(done) {
-      supertest(fakeGoogleWalletServer.app).post('/cancel').send(requestBody).expect(500, cancelResponseBody, done);
+      supertest(app).post('/cancel').send(requestBody).expect(500, cancelResponseBody, done);
     });
   });
 });

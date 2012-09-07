@@ -28,22 +28,34 @@ describe('Server', function() {
   };
   
   var server = new Server(responder);
+  var app;
+
+  before(function(done) {
+    server.start(3002, function(err, httpServer) {
+      app = httpServer;
+      done(err);
+    });
+  });
+
+  after(function(done) {
+    server.stop(done);
+  });
 
   describe('POST /purchase', function() {
     it('should use purchase method to process requests correctly', function(done) {
-      supertest(server.app).post('/purchase').send(requestBody).expect(responseStatus, responseBody, done);
+      supertest(app).post('/purchase').send(requestBody).expect(responseStatus, responseBody, done);
     });
   });
   
   describe('POST /cancel', function() {
     it('should use purchase method to process cancelled requests correctly', function(done) {
-      supertest(server.app).post('/cancel').send(requestBody).expect(cancelResponseStatus, cancelResponseBody, done);
+      supertest(app).post('/cancel').send(requestBody).expect(cancelResponseStatus, cancelResponseBody, done);
     });
   });
   
   describe('POST /postback', function() {
     it('should use postback method to process requests correctly', function(done) {
-      supertest(server.app).post('/postback').send(postbackRequestBody).expect(postbackResponseStatus, postbackResponseBody, done);
+      supertest(app).post('/postback').send(postbackRequestBody).expect(postbackResponseStatus, postbackResponseBody, done);
     });
   });
 });
