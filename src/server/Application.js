@@ -13,7 +13,9 @@ module.exports = function() {
       mongoose = require('mongoose'),
       mongooseAuth = require('mongoose-auth'),
       fs = require('fs'),
-      User = require('./models/user.js');
+      User = require('./models/user.js'),
+      Event = require('./models/event.js'),
+      Payment = require('./models/payment.js');
 
   var db = process.env.MONGOHQ_URL || config.databaseUrl || 'mongodb://localhost/IKnowThis';
   mongoose.connect(db);
@@ -60,8 +62,9 @@ module.exports = function() {
   app.get('/completeEvent/:id', eventRoutes.completeEvent);
   app.get('/confirmReceipt/:id', eventRoutes.confirmReceipt);
   app.get('/disputeReceipt/:id', eventRoutes.disputeReceipt);
-  app.get('/hangout', hangoutRoutes.hangout);
-  app.get('/hangoutxml', hangoutRoutes.hangoutxml);
+  app.get('/hangout', (new (require('./routes/Hangout'))(config.title)).get);
+  app.get('/hangoutxml', (new (require('./routes/HangoutXml'))(fs, config.baseUrl)).get);
+  app.post('/googleWalletPostback', (new (require('./routes/GoogleWalletPostback'))('secret', User, Event, Payment)).post);
   app.get('/resetDatabase', homeRoutes.resetDatabase);
   app.get('/user', userRoutes.user);
 

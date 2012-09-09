@@ -1,20 +1,12 @@
 describe('GoogleWalletPostback', function() {
-  var GoogleWalletPostback = require('./GoogleWalletPostback.js'); 
-
-  // define a mock JWT object
-  var mockJwt = {
-    encode: function(decoded) {
-      return {object: decoded};
-    },
-    decode: function(encoded) {
-      return encoded.object;
-    }
-  };
+  var GoogleWalletPostback = require('./GoogleWalletPostback.js');
+  var jwtSimple = require('jwt-simple');
+  var secret = 'secret';
 
   // define a mock request object
   var mockRequest = {
     body: {
-      jwt:  mockJwt.encode({ 
+      jwt:  jwtSimple.encode({ 
         iss: 'Google',
         aud: '1337133713371337',
         typ: 'google/payments/inapp/item/v1/postback/buy',
@@ -30,7 +22,7 @@ describe('GoogleWalletPostback', function() {
         response: {
           orderId: '1234567890'
         }
-      })
+      }, secret)
     }
   };
      
@@ -51,7 +43,7 @@ describe('GoogleWalletPostback', function() {
   };
 
   // construct the instance to test
-  var googleWalletPostback = new GoogleWalletPostback(mockJwt, MockUser, MockEvent, MockPayment);      
+  var googleWalletPostback = new GoogleWalletPostback(secret, MockUser, MockEvent, MockPayment);      
       
   describe('#post()', function() {
     it('should respond with 200 OK and the order ID if the payment can be processed', function(done) {

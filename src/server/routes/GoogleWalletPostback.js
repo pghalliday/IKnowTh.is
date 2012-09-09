@@ -1,7 +1,8 @@
-module.exports = function(jwt, User, Event, Payment) {
+module.exports = function(secret, User, Event, Payment) {
+  var jwtSimple = require('jwt-simple');
   this.post = function(req, res) {
-    var details = jwt.decode(req.body.jwt);
-    var sellerData = JSON.parse(details.request.sellerData);
+    var payload = jwtSimple.decode(req.body.jwt, secret);
+    var sellerData = JSON.parse(payload.request.sellerData);
     User.findById(sellerData.userId, function(error, user) {
       if (error) {
         res.send(500, error.toString());
@@ -12,11 +13,11 @@ module.exports = function(jwt, User, Event, Payment) {
               res.send(500, error.toString());
             } else {
               if (event) {
-                Payment.process(event, user, details, function(error, payment) {
+                Payment.process(event, user, payload, function(error, payment) {
                   if (error) {
                     res.send(500, error.toString());
                   } else {
-                    res.send(200, details.response.orderId);                  
+                    res.send(200, payload.response.orderId);                  
                   }
                 });
               } else {

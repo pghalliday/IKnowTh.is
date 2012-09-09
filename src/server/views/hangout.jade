@@ -2,8 +2,19 @@ html(lang='en')
   head
     script(src='//hangoutsapi.talkgadget.google.com/talkgadget/apps/gadgets/js/rpc.js')
     script(src='//hangoutsapi.talkgadget.google.com/hangouts/api/hangout.js?v=1.1')
-    script(src='/js/jquery.js')
-    script(src='/js/hangout.js')
     script(src='https://apis.google.com/js/client.js?onload=onClientReady')
+    script(src='js/superagent.js')
+    script(src='js/require.js')
+    script
+      function onClientReady() {
+        require('site/Hangout/Hangout', function(Hangout) {
+          var reporter = {
+            setMessage: function(message) {
+              console.log(message);
+            }
+          };
+          var hangout = new Hangout(gapi, request, reporter, window.location.search.substring(1));
+        });
+      }
   body
     img(src='/img/5live_plain_07.png')
