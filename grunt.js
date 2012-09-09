@@ -45,8 +45,12 @@ module.exports = function(grunt) {
         "after", // Used by mocha
         "afterEach", // Used by mocha
         "define", // Used by RequireJS
+        "QUnit", // Used by QUnit
         "test", // Used by QUnit
-        "ok" // Used by QUnit
+        "asyncTest", // Used by QUnit
+        "ok", // Used by QUnit
+        "equal", // Used by QUnit
+        "deepEqual" // Used by QUnit
         ]
       }
     },
