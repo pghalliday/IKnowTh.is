@@ -34,7 +34,7 @@ exports.home = function(req, res) {
 };
 
 exports.resetDatabase = function(req, res) {
-  if (config.isSuperUser(req.user)) {
+  if (req.user.isSuperUser()) {
     Event.remove({}, function(error) {
       if (error) {
         // TODO: try again?

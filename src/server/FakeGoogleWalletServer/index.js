@@ -5,8 +5,7 @@ module.exports = function(port, sellerId, key, postbackUrl, startId) {
       Response = require('./lib/Response'),
       OrderId = require('./lib/OrderId'),
       Postback = require('./lib/Postback'),
-      superagent = require('superagent'),
-      http = require('http');
+      superagent = require('superagent');
       
   var jwt = new Jwt(key),
       response = new Response(),
@@ -16,9 +15,7 @@ module.exports = function(port, sellerId, key, postbackUrl, startId) {
       server = new Server(responder);
   
   this.start = function(callback) {
-    server.start(port, function(err, httpServer) {
-      callback(err, httpServer);
-    });
+    server.start(port, callback);
   };
   
   this.stop = function(callback) {

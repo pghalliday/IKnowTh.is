@@ -1,80 +1,82 @@
-ul.nav.nav-tabs
-  li.active
-    a(href='#attendedEvents', data-toggle='tab') Attended events
-  li
-    a(href='#hostedEvents', data-toggle='tab') Hosted events
-  li
-    a(href='#payments', data-toggle='tab') Payments
-  li
-    a(href='#receipts', data-toggle='tab') Receipts
-.tab-content
-  .tab-pane.active(id='attendedEvents')
-    ul.thumbnails
-      - each event in attendedEvents
-        - if (event.date)      
-          script
-            $(function() {
-              $('#date#{event._id}').text($.format.date((new Date(#{event.date.valueOf()})), 'dd-MMM-yyyy hh:mm a'));
-            });
-        li.span3
-          - if (event.host.equals(user._id))
-            .thumbnail.event-list-thumbnail-host
-              a(href='/event/#{event._id}')
-                img(src='/event/#{event._id}/image', alt='', width='260')
-              p
-                a(href='/event/#{event._id}') #{event.name}
-              h5 #{event.description}
-              h5(id='date#{event._id}') No date and time!
-              h5 #{event.attendees.length} people attending
-          - else
-            .thumbnail.event-list-thumbnail
-              a(href='/event/#{event._id}')
-                img(src='/event/#{event._id}/image', alt='', width='260')
-              p
-                a(href='/event/#{event._id}') #{event.name}
-              h5 #{event.description}
-              h5(id='date#{event._id}') No date and time!
-              h5 #{event.attendees.length} people attending
-  .tab-pane(id='hostedEvents')
-    ul.thumbnails
-      - each event in hostedEvents
-        - if (event.date)      
-          script
-            $(function() {
-              $('#date#{event._id}').text($.format.date((new Date(#{event.date.valueOf()})), 'dd-MMM-yyyy hh:mm a'));
-            });
-        li.span3
-          - if (event.host.equals(user._id))
-            .thumbnail.event-list-thumbnail-host
-              a(href='/event/#{event._id}')
-                img(src='/event/#{event._id}/image', alt='', width='260')
-              p
-                a(href='/event/#{event._id}') #{event.name}
-              h5 #{event.description}
-              h5(id='date#{event._id}') No date and time!
-              h5 #{event.attendees.length} people attending
-          - else
-            .thumbnail.event-list-thumbnail
-              a(href='/event/#{event._id}')
-                img(src='/event/#{event._id}/image', alt='', width='260')
-              p
-                a(href='/event/#{event._id}') #{event.name}
-              h5 #{event.description}
-              h5(id='date#{event._id}') No date and time!
-              h5 #{event.attendees.length} people attending
-  .tab-pane(id='payments')
-    table.table-striped
-      - each payment in user.payments
-        tr
-          td #{payment.dateAdded.toString()}
-          td #{payment.eventId}
-          td #{payment.doExpressCheckoutPaymentResponse.paymentinfo[0].amt}
-          td #{payment.doExpressCheckoutPaymentResponse.paymentinfo[0].currencycode}
-  .tab-pane(id='receipts')
-    table.table-striped
-      - each receipt in user.receipts
-        tr
-          td #{receipt.dateAdded.toString()}
-          td #{receipt.eventId}
-          td #{receipt.amount}
-          td #{receipt.currencyCode}
+extends layout
+block mainContent
+  ul.nav.nav-tabs
+    li.active
+      a(href='#attendedEvents', data-toggle='tab') Attended events
+    li
+      a(href='#hostedEvents', data-toggle='tab') Hosted events
+    li
+      a(href='#payments', data-toggle='tab') Payments
+    li
+      a(href='#receipts', data-toggle='tab') Receipts
+  .tab-content
+    .tab-pane.active(id='attendedEvents')
+      ul.thumbnails
+        - each event in attendedEvents
+          - if (event.date)      
+            script
+              $(function() {
+                $('#date#{event._id}').text($.format.date((new Date(#{event.date.valueOf()})), 'dd-MMM-yyyy hh:mm a'));
+              });
+          li.span3
+            - if (event.host.equals(everyauth.user._id))
+              .thumbnail.event-list-thumbnail-host
+                a(href='/event/#{event._id}')
+                  img(src='/event/#{event._id}/image', alt='', width='260')
+                p
+                  a(href='/event/#{event._id}') #{event.name}
+                h5 #{event.description}
+                h5(id='date#{event._id}') No date and time!
+                h5 #{event.attendees.length} people attending
+            - else
+              .thumbnail.event-list-thumbnail
+                a(href='/event/#{event._id}')
+                  img(src='/event/#{event._id}/image', alt='', width='260')
+                p
+                  a(href='/event/#{event._id}') #{event.name}
+                h5 #{event.description}
+                h5(id='date#{event._id}') No date and time!
+                h5 #{event.attendees.length} people attending
+    .tab-pane(id='hostedEvents')
+      ul.thumbnails
+        - each event in hostedEvents
+          - if (event.date)      
+            script
+              $(function() {
+                $('#date#{event._id}').text($.format.date((new Date(#{event.date.valueOf()})), 'dd-MMM-yyyy hh:mm a'));
+              });
+          li.span3
+            - if (event.host.equals(everyauth.user._id))
+              .thumbnail.event-list-thumbnail-host
+                a(href='/event/#{event._id}')
+                  img(src='/event/#{event._id}/image', alt='', width='260')
+                p
+                  a(href='/event/#{event._id}') #{event.name}
+                h5 #{event.description}
+                h5(id='date#{event._id}') No date and time!
+                h5 #{event.attendees.length} people attending
+            - else
+              .thumbnail.event-list-thumbnail
+                a(href='/event/#{event._id}')
+                  img(src='/event/#{event._id}/image', alt='', width='260')
+                p
+                  a(href='/event/#{event._id}') #{event.name}
+                h5 #{event.description}
+                h5(id='date#{event._id}') No date and time!
+                h5 #{event.attendees.length} people attending
+    .tab-pane(id='payments')
+      table.table-striped
+        - each payment in everyauth.user.payments
+          tr
+            td #{payment.dateAdded.toString()}
+            td #{payment.eventId}
+            td #{payment.doExpressCheckoutPaymentResponse.paymentinfo[0].amt}
+            td #{payment.doExpressCheckoutPaymentResponse.paymentinfo[0].currencycode}
+    .tab-pane(id='receipts')
+      table.table-striped
+        - each receipt in everyauth.user.receipts
+          tr
+            td #{receipt.dateAdded.toString()}
+            td #{receipt.eventId}
+            td #{receipt.amount}
+            td #{receipt.currencyCode}

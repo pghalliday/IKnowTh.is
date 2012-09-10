@@ -265,7 +265,7 @@ exports.disputeReceipt = function(req, res) {
 };
 
 exports.resetEvent = function(req, res) {
-  if (config.isSuperUser(req.user)) {
+  if (req.user.isSuperUser()) {
     Event.findOne({
       _id: req.params.id
     }, function(error, event) {
@@ -294,7 +294,7 @@ exports.resetEvent = function(req, res) {
 };
 
 exports.resetEvents = function(req, res) {
-  if (config.isSuperUser(req.user)) {
+  if (req.user.isSuperUser()) {
     Event.remove({}, function(error) {
       if (error) {
         // TODO: try again?

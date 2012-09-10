@@ -22,6 +22,44 @@ describe('User', function() {
       }
     });
   });
+  
+  describe('#findOrCreateFromGoogleData()', function() {
+    it('should return a matching existing user or create a new one', function(done) {
+      var promise = {
+        fulfill: function(user) {
+          var user1 = user;
+          var promise = {
+            fulfill: function(user) {
+              var user2 = user;
+              var promise = {
+                fulfill: function(user) {
+                  var user3 = user;
+                  user1._id.should.eql(user3._id);
+                  user1._id.should.not.eql(user2._id);
+                  done();
+                },
+                fail: done
+              };
+              User.findOrCreateFromGoogleData({
+                id: 'testuser1',
+                name: 'test user1'
+              }, promise);
+            },
+            fail: done
+          };
+          User.findOrCreateFromGoogleData({
+            id: 'testuser2',
+            name: 'test user2'
+          }, promise);
+        },
+        fail: done
+      };
+      User.findOrCreateFromGoogleData({
+        id: 'testuser1',
+        name: 'test user1'
+      }, promise);
+    });
+  });
 
   describe('#host()', function() {
     it('should add a new event hosted by the user', function(done) {
