@@ -8,6 +8,7 @@ describe('Hangout', function() {
       response.rendered.should.eql({
         view: 'hangout',
         params: {
+          user: 'user',
           layout: false,
           title: 'title'
         }
@@ -16,7 +17,9 @@ describe('Hangout', function() {
     });
   });
   
-  var request = {};
+  var request = {
+    user: 'user',
+  };
   var response = {
     render: function(view, params) {
       this.rendered = {

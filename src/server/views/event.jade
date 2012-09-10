@@ -13,11 +13,8 @@ block mainContent
   p(id='date')
     | No date and time!
   p
-  - if (everyauth.loggedIn)
-    - console.log(everyauth);
-    - console.log(everyauth.user);
-    - console.log(everyauth.google.user);
-    - if (event.host.equals(everyauth.user._id))
+  - if (user)
+    - if (event.host.equals(user._id))
       p
         a(href='#{googleHangoutUrl}?authuser=0&gid=#{googleHangoutProjectId}&gd=#{event._id}', target='new')
           img(src='https://ssl.gstatic.com/s2/oz/images/stars/hangout/1/gplus-hangout-60x230-normal.png', alt='Start your Hangout')
@@ -28,7 +25,7 @@ block mainContent
         p
           a.btn(href='/deleteEvent/#{event._id}').btn-primary.btn-large Delete
     - else
-      - var attendee = event.getAttendee(everyauth.user);
+      - var attendee = event.getAttendee(user);
       - if (attendee != null)
         - if (event.hangout)
           p
@@ -37,7 +34,7 @@ block mainContent
         - else
           p
             | Your payment is confirmed (Thank you!), now waiting for hangout to start
-        - var pendingReceipt = event.getPendingReceipt(everyauth.user);
+        - var pendingReceipt = event.getPendingReceipt(user);
         - if (pendingReceipt != null)
           - if (pendingReceipt.disputed)
             | Receipt of event has been disputed on #{pendingReceipt.disputed.toString()}

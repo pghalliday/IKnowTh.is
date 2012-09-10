@@ -1,5 +1,6 @@
 var Event = require('../models/event.js'),
     User = require('../models/user.js'),
+    Payment = require('../models/payment.js'),
     config = require(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties;
 
 exports.home = function(req, res) {
@@ -10,6 +11,7 @@ exports.home = function(req, res) {
       console.log(new Error('Failed to find upcoming events'));
       console.log(error);
       res.render('error', {
+        user: req.user,
         title: config.title
       });
     } else {
@@ -19,10 +21,12 @@ exports.home = function(req, res) {
           console.log(new Error('Failed to find upcoming events'));
           console.log(error);
           res.render('error', {
+            user: req.user,
             title: config.title
           });
         } else {
           res.render('home', {
+            user: req.user,
             title: config.title,
             upcomingEvents: upcomingEvents,
             pastEvents: pastEvents
@@ -34,6 +38,7 @@ exports.home = function(req, res) {
 };
 
 exports.resetDatabase = function(req, res) {
+  console.log(req.user);
   if (req.user.isSuperUser()) {
     Event.remove({}, function(error) {
       if (error) {
@@ -47,10 +52,19 @@ exports.resetDatabase = function(req, res) {
             // TODO: try again?
             console.log((new Error('Failed to remove the users')));
             console.log(error);
+            res.redirect('/');  
           } else {
-            console.log('Database has been reset!');
+            Payment.remove({}, function(error) {
+              if (error) {
+                // TODO: try again?
+                console.log((new Error('Failed to remove the payments')));
+                console.log(error);
+              } else {
+                console.log('Database has been reset!');
+              }
+              res.redirect('/');  
+            });
           }
-          res.redirect('/');  
         });
       }      
     });

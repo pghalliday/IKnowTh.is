@@ -59,7 +59,7 @@ var ReceiptSchema = new Schema({
 
 var UserSchema = new Schema({
   id: String,
-  name: String,
+  profile: {},
   dateAdded: {
     type: Date,
   default:
@@ -70,27 +70,24 @@ var UserSchema = new Schema({
   receipts: [ReceiptSchema]
 });
 
-UserSchema.statics.findOrCreateFromGoogleData = function(googleUserMetadata, promise) {
+UserSchema.statics.findOrCreateFromGoogleData = function(profile, callback) {
+  console.log(profile);
   this.findOne({
-    id: googleUserMetadata.id
+    id: profile.id
   }, function(error, user) {
     if (error) {
-      promise.fail(error);
+      callback(error);
     } else {
       if (user) {
-        promise.fulfill(user);
+        // update the profile data in case it changed
+        user.profile = profile;
+        user.save(callback);
       } else {
         var newUser = new User({
-          id: googleUserMetadata.id,
-          name: googleUserMetadata.name
+          id: profile.id,
+          profile: profile
         });
-        newUser.save(function(error, user) {
-          if (error) {
-            promise.fail(error);
-          } else {
-            promise.fulfill(user);
-          }
-        });
+        newUser.save(callback);
       }
     }
   });

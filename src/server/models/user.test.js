@@ -25,39 +25,42 @@ describe('User', function() {
   
   describe('#findOrCreateFromGoogleData()', function() {
     it('should return a matching existing user or create a new one', function(done) {
-      var promise = {
-        fulfill: function(user) {
+      User.findOrCreateFromGoogleData({
+        id: 'testuser1',
+        name: 'name 1'
+      }, function(err, user) {
+        if (err) {
+          done(err);
+        } else {
           var user1 = user;
-          var promise = {
-            fulfill: function(user) {
+          user1.profile.name.should.eql('name 1');
+          User.findOrCreateFromGoogleData({
+            id: 'testuser2',
+            name: 'name 2'
+          }, function(err, user) {
+            if (err) {
+              done(err);
+            } else {
               var user2 = user;
-              var promise = {
-                fulfill: function(user) {
+              user2.profile.name.should.eql('name 2');
+              User.findOrCreateFromGoogleData({
+                id: 'testuser1',
+                name: 'name 3'
+              }, function (err, user) {
+                if (err) {
+                  done(err);
+                } else {
                   var user3 = user;
+                  user3.profile.name.should.eql('name 3');
                   user1._id.should.eql(user3._id);
                   user1._id.should.not.eql(user2._id);
                   done();
-                },
-                fail: done
-              };
-              User.findOrCreateFromGoogleData({
-                id: 'testuser1',
-                name: 'test user1'
-              }, promise);
-            },
-            fail: done
-          };
-          User.findOrCreateFromGoogleData({
-            id: 'testuser2',
-            name: 'test user2'
-          }, promise);
-        },
-        fail: done
-      };
-      User.findOrCreateFromGoogleData({
-        id: 'testuser1',
-        name: 'test user1'
-      }, promise);
+                }
+              });
+            }
+          });
+        }
+      });
     });
   });
 

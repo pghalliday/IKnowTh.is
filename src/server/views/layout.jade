@@ -45,13 +45,13 @@ html(lang='en')
           a.brand(href='/') #{title}
           .nav-collapse
             ul.nav
-              - if (everyauth.loggedIn)
+              - if (user)
                 li
                   a(href='/newEvent') New Event
                 li
                   a(href='/user') My Stuff
                 li
-                  a(href='/logout') Log out #{everyauth.google.user.name}
+                  a(href='/logout') Log out #{user.profile.displayName}
               - else
                 li
                   a(href='/auth/google') Login with Google

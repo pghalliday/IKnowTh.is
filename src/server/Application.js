@@ -11,62 +11,55 @@ module.exports = function() {
       hangoutRoutes = require('./routes/hangout.js'),
       config = require(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties,
       mongoose = require('mongoose'),
-      everyauth = require('everyauth'),
+      passport = require('passport'),
+      GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
       fs = require('fs'),
       User = require('./models/user.js'),
       Event = require('./models/event.js'),
       Payment = require('./models/payment.js');
-
+      
   var port = process.env.PORT || config.port || 3000;
   var db = process.env.MONGOHQ_URL || config.databaseUrl || 'mongodb://localhost/IKnowThis';
   var app = express();
   var server = http.createServer(app);
 
-  everyauth.everymodule.findUserById(function(userId, callback) {
-    console.log('**********************************************************');
-    User.findOne({
-      id: userId
-    }, function(err, user) {
-      console.log(err);
-      console.log(user);
-      callback(err, user);
-    });
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
   });
 
-  everyauth.google
-    .appId(config.googleAuthAppId)
-    .appSecret(config.googleAuthAppSecret)
-    .scope('https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email') // What you want access to
-    .handleAuthCallbackError( function (req, res) {
-      /* TODO */
-      // If a user denies your app, Google will redirect the user to
-      // /auth/facebook/callback?error=access_denied
-      // This configurable route handler defines how you want to respond to
-      // that.
-      // If you do not configure this, everyauth renders a default fallback
-      // view notifying the user that their authentication failed and why.
-    })
-    .findOrCreateUser( function (session, accessToken, accessTokenExtra, googleUserMetadata) {
-      var promise = this.Promise();
-      User.findOrCreateFromGoogleData(googleUserMetadata, promise);
-      return promise;
-    })
-    .redirectPath('/');
+  passport.deserializeUser(function(id, done) {
+    User.findOne({
+      id: id
+    }, done);
+  });
 
+  passport.use(new GoogleStrategy({
+      clientID: config.googleAuthAppId,
+      clientSecret: config.googleAuthAppSecret,
+      callbackURL: '/auth/google/callback'
+    },
+    function(token, tokenSecret, profile, done) {
+      User.findOrCreateFromGoogleData(profile, function(err, user) {
+        return done(err, user);
+      });
+    }
+  ));
+  
   // Configuration
   app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     
     app
+      .use(express.static(__dirname + '/../static'))
       .use(express.bodyParser())
       .use(express.cookieParser())
       .use(express.session({
         secret: '25Y3d3ldKn9tb0EZ'
       }))
-      .use(everyauth.middleware(app))
       .use(express.methodOverride())
-      .use(express.static(__dirname + '/../static'));
+      .use(passport.initialize())
+      .use(passport.session());
   });
 
   app.configure('development', function() {
@@ -98,6 +91,32 @@ module.exports = function() {
   app.get('/hangoutxml', (new (require('./routes/HangoutXml'))(fs, config.baseUrl)).get);
   app.post('/googleWalletPostback', (new (require('./routes/GoogleWalletPostback'))('secret', User, Event, Payment)).post);
   app.get('/user', userRoutes.user);
+
+  // authentication routes
+  app.get('/auth/google',
+    passport.authenticate('google', {
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+      ]
+    }),
+    function(req, res){
+      // The request will be redirected to Google for authentication, so this
+      // function will not be called.
+    });
+
+  app.get('/auth/google/callback', 
+    passport.authenticate('google', {
+      failureRedirect: '/'
+    }),
+    function(req, res) {
+      res.redirect('/');
+    });
+
+  app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+  });  
 
   // super user routes
   app.get('/resetEvent/:id', eventRoutes.resetEvent);

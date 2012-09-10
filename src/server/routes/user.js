@@ -6,6 +6,7 @@ exports.user = function(req, res) {
     // TODO: render a standard error?
     console.log(new Error('User is not logged in'));
     res.render('error', {
+      user: req.user,
       title: config.title
     });
   } else {
@@ -20,6 +21,7 @@ exports.user = function(req, res) {
             console.log(error);
           } else {
             res.render('user', {
+              user: req.user,
               title: config.title,
               attendedEvents: attendedEvents,
               hostedEvents: hostedEvents

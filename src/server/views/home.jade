@@ -18,8 +18,8 @@ block mainContent
                 $('#date#{event._id}').text($.format.date((new Date(#{event.date.valueOf()})), 'dd-MMM-yyyy hh:mm a'));
               });
           li.span3
-            - if (everyauth.loggedIn)
-              - if (event.host.equals(everyauth.user._id))
+            - if (user)
+              - if (event.host.equals(user._id))
                 .thumbnail.event-list-thumbnail-host
                   a(href='/event/#{event._id}')
                     img(src='/event/#{event._id}/image', alt='', width='260')
@@ -55,11 +55,8 @@ block mainContent
                 $('#date#{event._id}').text($.format.date((new Date(#{event.date.valueOf()})), 'dd-MMM-yyyy hh:mm a'));
               });
           li.span3
-            - if (everyauth.loggedIn)
-              - console.log(everyauth);
-              - console.log(everyauth.user);
-              - console.log(everyauth.google.user);
-              - if (event.host.equals(everyauth.user._id))
+            - if (user)
+              - if (event.host.equals(user._id))
                 .thumbnail.event-list-thumbnail-host
                   a(href='/event/#{event._id}')
                     img(src='/event/#{event._id}/image', alt='', width='260')

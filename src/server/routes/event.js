@@ -11,10 +11,13 @@ exports.event = function(req, res) {
       console.log(new Error('Failed to find event'));
       console.log(error);
       res.render('error', {
+        user: req.user,
+        profile: req.profile,
         title: config.title
       });
     } else {
       res.render('event', {
+        user: req.user,
         title: config.title,
         maximumAttendees: config.maximumAttendees,
         googleHangoutUrl: config.googleHangoutUrl,
@@ -48,6 +51,7 @@ exports.eventImage = function(req, res) {
 
 exports.newEvent = function(req, res) {
   res.render('newEvent', {
+    user: req.user,
     title: config.title
   });
 };
