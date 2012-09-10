@@ -7,7 +7,6 @@ The following configuration information needs to be present in the file ~/.iknow
 	exports.properties = {
 	  title: '<The application title>',
 	  superUsers: ['<Google user ID>', '<Google user ID>', etc],
-	  isSuperUser: function(googleUserId) {return (this.superUsers.indexOf(googleUserId) != -1);},
 	  baseUrl: '<The base URL for the instance (should include the port number if not 80)>',
 	  port: <Optional: The port to use (defaults to 3000)>,
 	  maximumAttendees: <Maximum number of attendees: probably 7 as there is a host and only 7 other spots available in google hangouts>,
