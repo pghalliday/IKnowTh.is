@@ -23,11 +23,12 @@ The following configuration information needs to be present in the file ~/.iknow
 	};
 
 # Deployment to local development
+* Install git
 * Install Node
 * Install Mongo, start Mongo server
+* Install PhantomJS into the system path
 * use git to clone
 * go to command line at directory
 * run 'npm install'
-** The mongoose-auth package will need to build the bcrypt stuff so you may need to install make and g++
-** This will not install on windows (so windows is currently unsupported)
-* run 'node src/server/main.js'
+* run 'grunt' to run tests
+* run 'node src/server/main.js' to start the application
