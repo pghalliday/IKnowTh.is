@@ -8,7 +8,6 @@ module.exports = function() {
       homeRoutes = require('./routes/home.js'),
       userRoutes = require('./routes/user.js'),
       eventRoutes = require('./routes/event.js'),
-      hangoutRoutes = require('./routes/hangout.js'),
       config = require(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'] + '/.iknowth.is/config.js').properties,
       mongoose = require('mongoose'),
       passport = require('passport'),
