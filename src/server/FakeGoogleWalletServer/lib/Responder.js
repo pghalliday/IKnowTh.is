@@ -1,11 +1,11 @@
-module.exports = function(jwt, sellerId, response, orderId, postback) {
+module.exports = function(jwt, sellerId, response, orderId, postback, log) {
   var Request = require('./Request'),
       request = new Request(jwt, sellerId);
 
   this.purchase = function(body, cancel, callback) {
     request.parse(body, function(err, request, iat, exp) {
       if (err) {
-        console.log(err);
+        log.error(err);
         response.error(request, 'MERCHANT_ERROR', function(body) {
           callback(500, body);
         });

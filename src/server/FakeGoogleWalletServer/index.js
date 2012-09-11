@@ -5,13 +5,15 @@ module.exports = function(port, sellerId, key, postbackUrl, startId) {
       Response = require('./lib/Response'),
       OrderId = require('./lib/OrderId'),
       Postback = require('./lib/Postback'),
+      Log = require('./lib/Log'),
       superagent = require('superagent');
       
   var jwt = new Jwt(key),
       response = new Response(),
       orderId = new OrderId(startId),
       postback = new Postback(postbackUrl, sellerId, superagent, jwt),
-      responder = new Responder(jwt, sellerId, response, orderId, postback),
+      log = new Log(console),
+      responder = new Responder(jwt, sellerId, response, orderId, postback, log),
       server = new Server(responder);
   
   this.start = function(callback) {

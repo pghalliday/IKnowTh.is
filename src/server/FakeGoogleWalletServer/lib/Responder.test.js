@@ -11,8 +11,10 @@ describe('Responder', function() {
   describe('#purchase', function() {
     it('should respond with status 500 and correct MERCHANT_ERROR response if the request body is not valid', function(done) {
       var response = new Response(null, 'MERCHANT_ERROR');
-      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback, log);    
       responder.purchase('invalid request body', false, function(status, body) {
+        should.exist(log.err, 'Error should have been logged with the log object');
+        log.err.toString().should.eql((new Error('Body has no jwt field')).toString());
         status.should.eql(500);
         body.should.eql(response.body);
         done();
@@ -21,7 +23,7 @@ describe('Responder', function() {
 
     it('should postback and respond with 200 and correct success body', function(done) {
       var response = new Response(null, null, orderId);
-      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback, log);    
       responder.purchase({
         jwt: jwtSimple.encode({
           iss: 'MySeller',
@@ -42,7 +44,7 @@ describe('Responder', function() {
       var response = new Response({
         failPostback: true            
       }, 'POSTBACK_ERROR', orderId);
-      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback, log);    
       responder.purchase({
         jwt: jwtSimple.encode({
           iss: 'MySeller',
@@ -63,7 +65,7 @@ describe('Responder', function() {
     
     it('should respond with 500 and correct PURCHASE_CANCELLED response if flagged to cancel', function(done) {
       var response = new Response('valid request', 'PURCHASE_CANCELLED', orderId);
-      var responder = new Responder(jwt, 'MySeller', response, orderId, postback);    
+      var responder = new Responder(jwt, 'MySeller', response, orderId, postback, log);    
       responder.purchase({
         jwt: jwtSimple.encode({
           iss: 'MySeller',
@@ -83,7 +85,7 @@ describe('Responder', function() {
 
   describe('#postback', function() {
     it('should respond with 200 OK and the orderId if request is valid', function(done) {
-      var responder = new Responder(jwt, null, null, null, null);    
+      var responder = new Responder(jwt, null, null, null, null, null);    
       responder.postback({
         jwt: jwtSimple.encode({
           iss: 'Google',
@@ -104,7 +106,7 @@ describe('Responder', function() {
     });
     
     it('should respond with 500 error if request does not contain jwt field', function(done) {
-      var responder = new Responder(jwt, null, null, null, null);    
+      var responder = new Responder(jwt, null, null, null, null, null);    
       responder.postback({
         data: 'some data'
       }, function(status, body) {
@@ -115,7 +117,7 @@ describe('Responder', function() {
     });
     
     it('should respond with 500 error if jwt field cannot be decoded', function(done) {
-      var responder = new Responder(jwt, null, null, null, null);    
+      var responder = new Responder(jwt, null, null, null, null, null);    
       responder.postback({
         jwt: jwtSimple.encode({
           iss: 'Google',
@@ -136,7 +138,7 @@ describe('Responder', function() {
     });
     
     it('should respond with 500 error if JWT does not contain an order ID', function(done) {
-      var responder = new Responder(jwt, null, null, null, null);    
+      var responder = new Responder(jwt, null, null, null, null, null);    
       responder.postback({
         jwt: jwtSimple.encode({
           iss: 'Google',
@@ -198,6 +200,12 @@ describe('Responder', function() {
           callback(null, self.data);
         });
       }
+    }
+  };
+  
+  var log = {
+    error: function(err) {
+      this.err = err;
     }
   };
 });
