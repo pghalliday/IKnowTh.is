@@ -6,7 +6,7 @@ describe('User', function() {
 
   before(function(done) {
     // connect to a test database
-    mongoose.connect('mongodb://localhost/UnitTest_Hangout_Event', done);
+    mongoose.connect('mongodb://localhost/UnitTest_Hangout_User', done);
   });
 
   after(function(done) {

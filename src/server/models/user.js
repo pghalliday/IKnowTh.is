@@ -71,7 +71,6 @@ var UserSchema = new Schema({
 });
 
 UserSchema.statics.findOrCreateFromGoogleData = function(profile, callback) {
-  console.log(profile);
   this.findOne({
     id: profile.id
   }, function(error, user) {
